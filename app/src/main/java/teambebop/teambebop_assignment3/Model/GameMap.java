@@ -5,4 +5,6 @@ package teambebop.teambebop_assignment3.Model;
  */
 
 public class GameMap {
+    int[][] map;
 }
+

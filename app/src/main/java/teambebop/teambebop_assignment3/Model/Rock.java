@@ -4,5 +4,12 @@ package teambebop.teambebop_assignment3.Model;
  * Created by Byron on 5/17/2017.
  */
 
-public class Rock {
+public class Rock extends MovingGameObject {
+    public boolean shouldFall() {
+        return false;
+    }
+
+    public void fall() {
+
+    }
 }

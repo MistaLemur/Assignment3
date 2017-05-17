@@ -5,4 +5,34 @@ package teambebop.teambebop_assignment3.Controller;
  */
 
 public class GameController {
+    private GameView gameView;
+    private DigDug digDug;
+    private Monster[] monsters;
+    private Rock[] rocks;
+    private GameMap map;
+
+    private GameThread gameThread;
+
+    public GameController() {
+        gameThread = new GameThread(this, gameView);
+        gameThread.start();
+    }
+
+    public void processInput(/** parameter */) {
+        // if (moveRight) {
+        //    digDug.moveRight();
+        // }
+        // if (attack) {
+        //    digDug.attack();
+        // }
+    }
+
+    public void update() { // update anything that's moving
+        for (int i = 0; i < monsters.length; i++)
+            monsters[i].attack();
+        for (int i = 0; i < rocks.length; i++) {
+            if (rocks[i].shouldFall())
+                rocks[i].fall();
+        }
+    }
 }
