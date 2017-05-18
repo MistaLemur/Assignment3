@@ -4,6 +4,11 @@ package teambebop.teambebop_assignment3.Controller;
  * Created by Byron on 5/17/2017.
  */
 
+import teambebop.teambebop_assignment3.*;
+import teambebop.teambebop_assignment3.Model.*;
+import teambebop.teambebop_assignment3.View.*;
+
+
 public class GameController {
     private GameView gameView;
     private DigDug digDug;
