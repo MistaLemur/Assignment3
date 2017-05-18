@@ -2,6 +2,9 @@ package teambebop.teambebop_assignment3.Controller;
 
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
+
+import teambebop.teambebop_assignment3.View.GameView;
+
 /**
  * Created by Byron on 5/17/2017.
  */
