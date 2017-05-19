@@ -2,6 +2,7 @@ package teambebop.teambebop_assignment3.View;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
@@ -22,7 +23,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Monster[] monsters;
     private Rock[] rocks;
     private GameMap gameMap; //level
-    private
+    private Bitmap[] soil;
 
     private GameController controller;
 
@@ -64,11 +65,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         // controller.processInput();
         return false;
     }
-
-    public void soilsprites(){
-        monster1[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.Joy);
-        monster1[1] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.Celebi);
-
+    //soil sprites
+    public void soilsprites(Context _context){
+        soil[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.soil1);
+        soil[1] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.soil2);
+        soil[2] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.soil3);
 
     }
 }
