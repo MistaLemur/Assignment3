@@ -1,5 +1,11 @@
 package teambebop.teambebop_assignment3.Model;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import teambebop.teambebop_assignment3.R;
+
 /**
  * Created by Byron on 5/17/2017.
  */
@@ -8,7 +14,7 @@ public class Rock extends MovingGameObject {
     public boolean shouldFall() {
         return false;
     }
-
+    public static Bitmap rocksprites[];
     public void fall() {
         // rock falls algorithm - Byron
         /*
@@ -22,6 +28,11 @@ public class Rock extends MovingGameObject {
 
         }
 
+    public static void loadrockSprites(Context _context) {
 
+        rocksprites = new Bitmap[1];
+        rocksprites[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.golemoddish);
+
+    }
     }
 }

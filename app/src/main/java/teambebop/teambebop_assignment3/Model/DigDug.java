@@ -42,10 +42,10 @@ public class DigDug extends MovingGameObject {
     public void stopAttack() {
 
     }
-    public static void loadMonsterSprites(Context _context) {
+    public static void loadDigDugSprite(Context _context) {
 
         DigDugman = new Bitmap[1];
-        DigDugman[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.Joy);
+        DigDugman[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.pikachu);
 
     }
 }
