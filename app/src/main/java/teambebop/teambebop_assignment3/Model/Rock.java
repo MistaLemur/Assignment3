@@ -13,7 +13,7 @@ import teambebop.teambebop_assignment3.R;
 public class Rock extends MovingGameObject {
     public boolean shouldFall() {
         return false;
-    }
+    } //false == rock does not fall    ; true == the rock falls
     public static Bitmap rocksprites[];
     public void fall() {
         // rock falls algorithm - Byron
