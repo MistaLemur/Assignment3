@@ -1,5 +1,11 @@
 package teambebop.teambebop_assignment3.Model;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import teambebop.teambebop_assignment3.R;
+
 /**
  * Created by Byron on 5/17/2017.
  */
@@ -17,6 +23,7 @@ public class DigDug extends MovingGameObject {
     private boolean alive;
     private int direction;
     private boolean attacking;
+    public static Bitmap DigDugman[];
 
     public void moveLeft() {
 
@@ -33,6 +40,12 @@ public class DigDug extends MovingGameObject {
     }
 
     public void stopAttack() {
+
+    }
+    public static void loadDigDugSprite(Context _context) {
+
+        DigDugman = new Bitmap[1];
+        DigDugman[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.pikachu);
 
     }
 }

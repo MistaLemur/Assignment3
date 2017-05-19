@@ -136,6 +136,7 @@ class QuadTreeNode{
         //1 - intersects but neither contains the other
         //2 - this cell contains the entirety of the given circle
         //3 - the given circle contains the entirety of this cell
+
     }
 
     public void digTunnelRect(int ax1, int ay1, int ax2, int ay2){
