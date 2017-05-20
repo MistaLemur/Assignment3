@@ -1,9 +1,14 @@
 package teambebop.teambebop_assignment3.Model;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+
 import java.util.ArrayList;
 
 /**
- * Created by Byron on 5/17/2017.
+ * Created by Miguel SuVasquez on 5/17/2017.
  */
 
 /*
@@ -22,12 +27,17 @@ public class GameMap {
 
     public boolean collideDirtRect(int ax1, int ay1, int ax2, int ay2){
         //This function will return true if the given rectangle collides with ANY dirt.
-
+        return quadTreeRoot.collidesDirtRect(ax1, ay1, ax2, ay2);
     }
 
     public boolean collideDirtCircle(int ax1, int ay1, int r){
         //This function will return true if the given circle collides with ANY dirt.
+        return quadTreeRoot.collidesDirtCircle(ax1, ay1, r);
 
+    }
+
+    public void drawToCanvas(Canvas canvas){
+        quadTreeRoot.drawToCanvas(canvas);
     }
 }
 
@@ -46,6 +56,9 @@ class QuadTreeNode{
      0  indicates empty; a tunnel encompasses this whole node
      1  indicates filled; this whole node is made up of solid dirt
      */
+
+    public static int drawEmptyColor = Color.argb(224, 0, 0, 0);
+    //this is the color of tunnel pixels, drawn over the dirt backdrop. It is a mostly-opaque black.
 
     public QuadTreeNode(int nx1, int nx2, int ny1, int ny2, QuadTreeNode nParent){
         x1 = nx1;
@@ -127,6 +140,19 @@ class QuadTreeNode{
         //2 - this cell contains the entirety of the given rect
         //3 - the given rect contains the entirety of this cell
 
+        Rect A = new Rect(x1, y1, x2, y2);
+        Rect B = new Rect(ax1, ay1, ax2, ay2);
+
+        if(!A.intersect(B)) return 0; //the two rectangles don't touch
+
+        //does B contain this?
+        if(B.contains(A)) return 3;
+
+        //does this contain B?
+        if(A.contains(B)) return 2;
+
+        return 1;
+
     }
 
     public int collidesCircle(int ax1, int ay1, int r){
@@ -137,6 +163,28 @@ class QuadTreeNode{
         //2 - this cell contains the entirety of the given circle
         //3 - the given circle contains the entirety of this cell
 
+        double dist1 = distBetweenPoints(ax1, ay1, x1, y1);
+        double dist2 = distBetweenPoints(ax1, ay1, x2, y1);
+        double dist3 = distBetweenPoints(ax1, ay1, x1, y2);
+        double dist4 = distBetweenPoints(ax1, ay1, x2, y2);
+        Rect A = new Rect(x1, y1, x2, y2);
+        boolean contains = A.contains(ax1, ay1);
+
+
+        //the circle does not touch this rect.
+        if(!contains && !(dist1 <= r || dist2 <= r || dist3 <= r || dist4 <= r)) return 0;
+
+        //the circle contains this rect
+        if(dist1 <= r && dist2 <= r && dist3 <= r && dist4 <= r){
+            return 3;
+        }
+
+        //this rect contains the circle.
+        //the math here is incorrect, so I am leaving this commented out for hte time being.
+        //if(contains && dist1 > r && dist2 > r && dist3 > r && dist4 > r) return 2;
+
+        //the two are merely intersecting
+        return 1;
     }
 
     public void digTunnelRect(int ax1, int ay1, int ax2, int ay2){
@@ -170,12 +218,12 @@ class QuadTreeNode{
 
     }
 
-    public void digTunnelCircle(int ax1, int ay1, int r){
+    public void digTunnelCircle(int ax1, int ay1, int r) {
         //This function will dig a tunnel in the shape of the given rectangle
 
         //if I have children, just recursively function call on the children and then return
-        if(children.size() > 0){
-            for(QuadTreeNode child:children){
+        if (children.size() > 0) {
+            for (QuadTreeNode child : children) {
                 digTunnelCircle(ax1, ay1, r);
             }
 
@@ -184,37 +232,79 @@ class QuadTreeNode{
 
         //if I don't have children, run the collision check
         int collision = collidesCircle(ax1, ay1, r);
-        if(collision == 0) return; //the shape does not have anything to do with this node.
+        if (collision == 0) return; //the shape does not have anything to do with this node.
 
         //if the shape contains all of me or I cannot subdivide, then set my value to "empty"
-        if(collision == 3 || !canSubdivide()){
+        if (collision == 3 || !canSubdivide()) {
             isFilledIn = 0;
-        }else{
+        } else {
             //if intersects OR I contain the entirety of the given shape, then subdivide and recurse.
             isFilledIn = -1;
             subdivide();
 
-            for(QuadTreeNode child:children){
+            for (QuadTreeNode child : children) {
                 digTunnelCircle(ax1, ay1, r);
             }
         }
-
     }
-}
 
-class collisions{
-    /*
-     This class simply holds static collision checking functions.
-     All rectangles here are AABBs (axis-aligned bounding boxes)
-     It will have:
-     - Point in Rect
-     - Line intersects Line
-     - Rect in Rect
-     - Rect intersects Rect
-     - Line intersects Circle
-     - Point in Circle
-     - Rect in Circle
-     - Circle in Rect
-     - Rect intersects Circle
-     */
+    public boolean collidesDirtRect(int ax1, int ay1, int ax2, int ay2){
+        if(collidesRect(ax1, ay1, ax2, ay2) == 0){
+            return false;
+        }
+
+        if(children.size() > 0){
+            boolean returnValue = false;
+            for(QuadTreeNode child:children){
+                returnValue |= child.collidesDirtRect(ax1, ay1, ax2, ay2);
+            }
+
+            return returnValue;
+        }else{
+            if(isFilledIn == 1 && collidesRect(ax1, ay1, ax2, ay2) != 0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+
+    public boolean collidesDirtCircle(int ax1, int ay1, int r){
+        if(collidesCircle(ax1, ay1, r) == 0){
+            return false;
+        }
+
+        if(children.size() > 0){
+            boolean returnValue = false;
+            for(QuadTreeNode child:children){
+                returnValue |= child.collidesDirtCircle(ax1, ay1, r);
+            }
+
+            return returnValue;
+        }else{
+            if(isFilledIn == 1 && collidesCircle(ax1, ay1, r) != 0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+
+    public void drawToCanvas(Canvas canvas){
+        if(children.size() > 0){
+            //pass the draw call to the children
+            for(QuadTreeNode child:children){
+                child.drawToCanvas(canvas);
+            }
+        }else{
+            //draw a rect for this node
+            Rect rect = new Rect(x1, y1, x2, y2);
+            Paint rectPaint = new Paint();
+            canvas.drawRect(rect, rectPaint);
+        }
+    }
+
+    public static double distBetweenPoints(int ax1, int ay1, int ax2, int ay2){
+        return Math.sqrt((ax2-ax1) * (ax2-ax1) + (ay2-ay1) * (ay2-ay1));
+    }
 }
