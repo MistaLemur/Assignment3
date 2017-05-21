@@ -16,13 +16,16 @@ public class GameController {
     private Rock[] rocks;
     private GameMap map;
 
-    private GameThread gameThread;
+    public GameThread gameThread;
 
     public GameController(GameView newView) {
-        if(newView != null) gameView = newView;
 
-        gameThread = new GameThread(this, gameView);
-        gameThread.start();
+        gameView = newView;
+
+        initializeController();
+        newGame();
+
+        setGameView(newView);
     }
 
     public void processInput(/** parameter */) {
@@ -35,6 +38,7 @@ public class GameController {
     }
 
     public void update() { // update anything that's moving
+        /*
         for (int i = 0; i < monsters.length; i++) {
             //monsters[i].attack();
         }
@@ -42,6 +46,38 @@ public class GameController {
             if (rocks[i].shouldFall())
                 rocks[i].fall();
         }
+        */
+    }
+
+    public void initializeController(){
+        int width = gameView.getHeight();
+        int height = gameView.getWidth();
+        int mapWidth = Math.min(width, height);
+
+        System.out.println("NEW MAP: " + mapWidth);
+        map = new GameMap(0, 0, mapWidth, mapWidth);
+
+    }
+
+    public void newGame(){
+
+    }
+
+    public void generateLevel(int numTunnels, int numMonsters, int numRocks){
+
+    }
+
+    public void setGameView(GameView view){
+        if(gameThread != null){
+            gameThread.shouldStop = true;
+        }
+
+        gameView = view;
+        gameView.setGameMap(map);
+
+        gameThread = new GameThread(this, gameView);
+        gameThread.start();
+
     }
 
 }

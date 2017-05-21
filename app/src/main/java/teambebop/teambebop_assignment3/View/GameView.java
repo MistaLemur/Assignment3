@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -37,22 +39,45 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private static Bitmap backdrop;
 
-    private static GameController controller;
+    public static GameController controller;
 
     private int offx, offy; //These offsets here are for centering the game map regardless of orientation.
+    private int screenWidth, screenHeight, mapWidth;
+
+    private Context myContext;
 
     public GameView(Context context) {
 
         super(context);
+        getHolder().addCallback(this);
+        setFocusable(true);
+        setWillNotDraw(true);
+
+        myContext = context;
+        System.out.println("CONSTRUCTOR");
+
+        /*
+        if(controller == null) {
+            gameInitialization();
+        }
+        */
     }
 
+    public void setGameMap(GameMap newMap){
+        gameMap = newMap;
+    }
 
     private void drawDigDug(Canvas canvas) {
         // Draw DigDug
 
         //first draw the backdrop
+        Rect backdropRect = new Rect(offx, offy, offx+mapWidth, offy+mapWidth );
+        canvas.drawBitmap(backdrop, null, backdropRect, null);
 
         //then draw any tunnels over the backdrop
+        synchronized(controller.gameThread) {
+            gameMap.drawToCanvas(canvas, offx, offy);
+        }
 
         //then iterate through each MovingGameObject, and draw them. Order doesn't matter
 
@@ -65,8 +90,20 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         // Draw according to the game objects
-        drawDigDug(canvas);
-        System.out.println("surface draw");
+        //recompute screen dimensions
+
+        canvas.drawColor(Color.argb(255, 32, 32, 32));
+
+        screenWidth = canvas.getWidth();
+        screenHeight = canvas.getHeight();
+
+        mapWidth = Math.min(screenWidth,screenHeight);
+        offx = (screenWidth-mapWidth) / 2;
+        offy = (screenHeight-mapWidth) / 2;
+
+        if(backdrop != null){
+            drawDigDug(canvas);
+        }
 
     }
 
@@ -74,11 +111,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
         //constructor
 
-        if(controller == null){
-            //start a new game. do this by first creating the controller
-            controller = new GameController(this);
-        }
         System.out.println("surface create");
+        if(controller == null){
+            gameInitialization();
+        }else{
+            controller.setGameView(this);
+            computeOffsets();
+
+            double ratio = mapWidth / gameMap.getWidth();
+            gameMap.rescale(ratio);
+
+        }
+
     }
 
     @Override
@@ -97,7 +141,42 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public boolean onTouchEvent(MotionEvent event) {
         // ..
         // controller.processInput();
+
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+
+        if(event.getAction() == MotionEvent.ACTION_DOWN){
+            if(gameMap != null){
+                System.out.println(" ");
+                System.out.println("DIGGING AT " + (x-offx) + ", " + (y-offy));
+                int testRadius = 32;
+                synchronized (controller.gameThread) {
+                    gameMap.digTunnelCircle(x - offx, y - offy, testRadius);
+                    //gameMap.digTunnelRect(x - offx - testRadius, y - offy - testRadius, x - offx + testRadius, y - offy + testRadius);
+                }
+            }
+        }
+
         return false;
+    }
+
+    public void gameInitialization(){
+        System.out.println("NEW BACKDROP");
+        backdrop = BitmapFactory.decodeResource(myContext.getApplicationContext().getResources(), R.drawable.dirt_background);
+
+        System.out.println("NEW CONTROLLER");
+        controller = new GameController(this);
+
+        computeOffsets();
+    }
+
+    public void computeOffsets(){
+        screenWidth = getWidth();
+        screenHeight = getHeight();
+
+        mapWidth = Math.min(screenWidth,screenHeight);
+        offx = (screenWidth-mapWidth) / 2;
+        offy = (screenHeight-mapWidth) / 2;
     }
     //soil sprites
     /*
