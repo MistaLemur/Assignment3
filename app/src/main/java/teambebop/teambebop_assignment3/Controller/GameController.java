@@ -35,8 +35,9 @@ public class GameController {
     }
 
     public void update() { // update anything that's moving
-        for (int i = 0; i < monsters.length; i++)
-            monsters[i].attack();
+        for (int i = 0; i < monsters.length; i++) {
+            //monsters[i].attack();
+        }
         for (int i = 0; i < rocks.length; i++) {
             if (rocks[i].shouldFall())
                 rocks[i].fall();

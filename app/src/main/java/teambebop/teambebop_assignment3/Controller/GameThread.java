@@ -21,7 +21,9 @@ public class GameThread extends Thread {
     public void run() {
         SurfaceHolder sh = gameView.getHolder();
         System.out.println("START THREAD");
+
         while (true) {
+
             System.out.println("GAME THREAD");
             Canvas canvas = sh.lockCanvas();
             if (canvas != null) {

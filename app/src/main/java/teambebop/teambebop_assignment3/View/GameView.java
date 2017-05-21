@@ -26,6 +26,13 @@ import teambebop.teambebop_assignment3.R;
  */
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
+    /*
+     These three variables are static because the GameView object is cleaned up and
+     reinstantiated everytime the screen changes orientation.
+
+     So, instead, I would prefer that the game changes orientation along with the screen rather than
+     restarting the game everytime the screen changes orientation.
+     */
     private static GameMap gameMap; //level
 
     private static Bitmap backdrop;
@@ -37,11 +44,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public GameView(Context context) {
 
         super(context);
-
-        if(controller == null){
-            //start a new game. do this by first creating the controller
-            controller = new GameController(this);
-        }
     }
 
 
@@ -71,6 +73,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         //constructor
+
+        if(controller == null){
+            //start a new game. do this by first creating the controller
+            controller = new GameController(this);
+        }
         System.out.println("surface create");
     }
 
