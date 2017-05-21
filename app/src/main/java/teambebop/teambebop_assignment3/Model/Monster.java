@@ -11,7 +11,7 @@ import teambebop.teambebop_assignment3.R;
  */
 /*
 Monster:
-1: Follows dig dug (speed normal dig dug speed) (I am probably going to make them start moving around)
+1: Follows dig dug (speed normal dig dug speed) (I am probably going to make them start by moving around)
 2:
 3:
  */
@@ -30,8 +30,18 @@ public class Monster extends MovingGameObject {
 
         }
     }
+    //collideDirtRect(int ax1, int ay1, int ax2, int ay2)
+    //making mosnter move
+    //public boolean collideDirtCircle(int ax1, int ay1, int r)
 
-    public void attack() {
+    //colliding with dirt. we stop
+    public void
 
+    //following digdug and touch digdug
+    public void attack( int ax1, int ay1, int r) {
+
+        if( GameMap.collideDirtCircle(ax1,ay1,r) == true ){
+
+        }
     }
 }
