@@ -18,22 +18,45 @@ import teambebop.teambebop_assignment3.R;
  * Created by Byron on 5/17/2017.
  */
 
-public class GameView extends SurfaceView implements SurfaceHolder.Callback {
-    private DigDug digDug;
-    private Monster[] monsters;
-    private Rock[] rocks;
-    private GameMap gameMap; //level
-    private Bitmap[] soil;
 
-    private GameController controller;
+/*
+ * For reference, pixel scaling is ~2x.
+ * Base resolution of the map will be ~1024x1024
+ * so with a board size of "11x11" we will have "grid sizes" of approximately 48x48
+ */
+
+public class GameView extends SurfaceView implements SurfaceHolder.Callback {
+    private static GameMap gameMap; //level
+
+    private static Bitmap backdrop;
+
+    private static GameController controller;
+
+    private int offx, offy; //These offsets here are for centering the game map regardless of orientation.
 
     public GameView(Context context) {
+
         super(context);
+
+        if(controller == null){
+            //start a new game. do this by first creating the controller
+            controller = new GameController(this);
+        }
     }
 
 
     private void drawDigDug(Canvas canvas) {
         // Draw DigDug
+
+        //first draw the backdrop
+
+        //then draw any tunnels over the backdrop
+
+        //then iterate through each MovingGameObject, and draw them. Order doesn't matter
+
+        //lastly, draw score, lives?, level?
+
+
     }
 
     @Override
@@ -41,22 +64,26 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         super.draw(canvas);
         // Draw according to the game objects
         drawDigDug(canvas);
+        System.out.println("surface draw");
 
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-
+        //constructor
+        System.out.println("surface create");
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 
+        System.out.println("surface change");
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
 
+        System.out.println("surface destroy");
     }
 
     @Override
@@ -66,11 +93,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         return false;
     }
     //soil sprites
+    /*
     public void soilsprites(Context _context){
         soil[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.soil1);
         soil[1] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.soil2);
         soil[2] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.soil3);
-
     }
+    */
 }
 

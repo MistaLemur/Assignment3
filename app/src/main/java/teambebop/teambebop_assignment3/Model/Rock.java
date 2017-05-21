@@ -15,6 +15,7 @@ public class Rock extends MovingGameObject {
         return false;
     } //false == rock does not fall    ; true == the rock falls
     public static Bitmap rocksprites[];
+
     public void fall() {
         // rock falls algorithm - Byron
         /*
@@ -24,15 +25,16 @@ public class Rock extends MovingGameObject {
 
         *********** Ask Anthony Miguel Vasquez about how big the quadtree will be. ***********
         */
-        if (!shouldFall()){
+        if (!shouldFall()) {
 
         }
+    }
 
     public static void loadrockSprites(Context _context) {
 
         rocksprites = new Bitmap[1];
-        rocksprites[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.golemoddish);
+        //rocksprites[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.golemoddish);
 
     }
-    }
+
 }

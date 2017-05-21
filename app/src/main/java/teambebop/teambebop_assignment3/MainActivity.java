@@ -12,6 +12,5 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         GameView gameView = new GameView(this);
         setContentView(gameView);
-        setContentView(R.layout.activity_main);
     }
 }

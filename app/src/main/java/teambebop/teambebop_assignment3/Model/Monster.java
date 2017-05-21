@@ -23,10 +23,10 @@ public class Monster extends MovingGameObject {
     public static void loadMonsterSprites(Context _context) {
         if (monster1 == null) {
             monster1 = new Bitmap[3];
-            monster1[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.Joy);
-            monster1[1] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.Celebi);
+            //monster1[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.Joy);
+            //monster1[1] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.Celebi);
             // FIRE BREATHER
-            monster1[2] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.Charizard);
+            //monster1[2] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.Charizard);
 
         }
     }

@@ -18,7 +18,9 @@ public class GameController {
 
     private GameThread gameThread;
 
-    public GameController() {
+    public GameController(GameView newView) {
+        if(newView != null) gameView = newView;
+
         gameThread = new GameThread(this, gameView);
         gameThread.start();
     }

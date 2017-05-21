@@ -25,6 +25,7 @@ public class GameMap {
     QuadTreeNode quadTreeRoot;
 
     //the map has limited coordinates!
+
     int x1, x2, y1, y2;
 
     public boolean collideDirtRect(int ax1, int ay1, int ax2, int ay2){
@@ -37,8 +38,8 @@ public class GameMap {
         return quadTreeRoot.collidesDirtCircle(ax1, ay1, r);
     }
 
-    public void drawToCanvas(Canvas canvas){
-        quadTreeRoot.drawToCanvas(canvas);
+    public void drawToCanvas(Canvas canvas, int offx, int offy){
+        quadTreeRoot.drawToCanvas(canvas, offx, offy);
     }
 }
 
@@ -62,7 +63,7 @@ class QuadTreeNode{
      1  indicates filled; this whole node is made up of solid dirt
      */
 
-    public static int drawTunnelAlpha = 224;
+    public static int drawTunnelAlpha = 192;
     //the alpha of a drawn tunnel pixel is almost fully opaque.
 
     public QuadTreeNode(int nx1, int nx2, int ny1, int ny2, QuadTreeNode nParent){
@@ -210,6 +211,9 @@ class QuadTreeNode{
     public void digTunnelRect(int ax1, int ay1, int ax2, int ay2){
         //This function will dig a tunnel in the shape of the given rectangle
 
+        int collision = collidesRect(ax1, ay1, ax2, ay2);
+        if(collision == 0) return; //the shape does not have anything to do with this node.
+
         //if I have children, just recursively function call on the children and then return
         if(children.size() > 0){
             for(QuadTreeNode child:children){
@@ -218,9 +222,7 @@ class QuadTreeNode{
             return;
         }
 
-        //if I don't have children, run the collision check
-        int collision = collidesRect(ax1, ay1, ax2, ay2);
-        if(collision == 0) return; //the shape does not have anything to do with this node.
+        //if I don't have children, check collision type...
 
         //if the shape contains all of me or I cannot subdivide, then set my value to "empty"
         if(collision == 3 || !canSubdivide()){
@@ -240,6 +242,10 @@ class QuadTreeNode{
     public void digTunnelCircle(int ax1, int ay1, int r) {
         //This function will dig a tunnel in the shape of the given rectangle
 
+        //run collision check
+        int collision = collidesCircle(ax1, ay1, r);
+        if (collision == 0) return; //the shape does not have anything to do with this node.
+
         //if I have children, just recursively function call on the children and then return
         if (children.size() > 0) {
             isFilledIn = -1;
@@ -250,9 +256,7 @@ class QuadTreeNode{
             return;
         }
 
-        //if I don't have children, run the collision check
-        int collision = collidesCircle(ax1, ay1, r);
-        if (collision == 0) return; //the shape does not have anything to do with this node.
+        //if I don't have children, check collision type
 
         //if the shape contains all of me or I cannot subdivide, then set my value to "empty"
         if (collision == 3 || !canSubdivide()) {
@@ -281,7 +285,7 @@ class QuadTreeNode{
 
             return returnValue;
         }else{
-            if(isFilledIn == 1 && collidesRect(ax1, ay1, ax2, ay2) != 0){
+            if(isFilledIn == 1){
                 return true;
             }else{
                 return false;
@@ -302,7 +306,7 @@ class QuadTreeNode{
 
             return returnValue;
         }else{
-            if(isFilledIn == 1 && collidesCircle(ax1, ay1, r) != 0){
+            if(isFilledIn == 1){
                 return true;
             }else{
                 return false;
@@ -310,15 +314,20 @@ class QuadTreeNode{
         }
     }
 
-    public void drawToCanvas(Canvas canvas){
+    public void drawToCanvas(Canvas canvas, int offx, int offy){
+        //this will draw the quad tree to a canvas.
+        //It draws tunnels as dark transparent pixels.
+
+        //ONLY THE RECTS OF LEAF NODES ARE DRAWN
+
         if(children.size() > 0){
             //pass the draw call to the children
             for(QuadTreeNode child:children){
-                child.drawToCanvas(canvas);
+                child.drawToCanvas(canvas, offx, offy);
             }
         }else if(isFilledIn == 0){
             //draw a rect for this node if it does not have dirt.
-            Rect rect = new Rect(x1, y1, x2, y2);
+            Rect rect = new Rect(x1 + offx, y1 + offy, x2 + offx, y2 + offy);
             Paint rectPaint = new Paint();
             rectPaint.setARGB(drawTunnelAlpha, 0,0,0);
             canvas.drawRect(rect, rectPaint);
