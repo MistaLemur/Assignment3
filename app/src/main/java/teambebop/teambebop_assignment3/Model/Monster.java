@@ -34,7 +34,7 @@ public class Monster extends MovingGameObject {
     //making mosnter move
     //public boolean collideDirtCircle(int ax1, int ay1, int r)
 
-    //colliding with dirt. we stop
+    //colliding with dirt. we stop wut
     public void
 
     //following digdug and touch digdug
