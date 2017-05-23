@@ -53,7 +53,7 @@ To determine what direction to move along
         }else if ( xdestvect > 0 && ydestvect < 0){
             yPos++;
         } else if(xdestvect < 0 && ydestvect >0){
-            yPos++;
+            yPos--;
         } else{
             xPos--;
         }
