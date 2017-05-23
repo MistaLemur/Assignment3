@@ -27,15 +27,23 @@ public class DigDug extends MovingGameObject {
     public static Bitmap DigDugman[];
     int action = event.getAction() & event.ACTION_MASK;
 
-    public void moveLeft() {
-       if( event.getAction() == MotionEvent.ACTION_DOWN){
+    public void moveLeft(int xPos) {
+       xPos--;
 
-       }
     }
 
-    public void moveRight() {
-        // xPos++;
+    public void moveRight(int xPos) {
+         xPos++;
 
+    }
+
+    public void moveDown(int yPos) {
+        yPos--;
+
+    }
+
+    public void moveUp (int yPos){
+        yPos++;
     }
 
     // ...
