@@ -19,6 +19,8 @@ public class Monster extends MovingGameObject {
 
     protected boolean alive;
     public static Bitmap monster1[];
+    int xPos =0;
+    int yPos = 0;
 
     public static void loadMonsterSprites(Context _context) {
         if (monster1 == null) {
@@ -32,11 +34,30 @@ public class Monster extends MovingGameObject {
     }
     //collideDirtRect(int ax1, int ay1, int ax2, int ay2)
     //making mosnter move
-    //public boolean collideDirtCircle(int ax1, int ay1, int r)
-    public void moveauto(int ax1, int ay1, int ){
-        if( GameMap.collideDirtRect(ax1,ay1,r) == true ){
+    /*
+    Compute the direction vector from the monster to digdug
+You do this by subtracting the coordinates from one to another
+And then you look at the x and y components of the direction vector
+To determine what direction to move along
+     */
 
+    // ax1 = digdug position
+    //ay1 == digdug position
+
+    public void moveauto(int ax1, int ay1){
+        int xdestvect = ax1 - xPos;
+        int ydestvect = ay1 - yPos;
+
+        if (xdestvect > 0 && ydestvect >0){
+            xPos++;
+        }else if ( xdestvect > 0 && ydestvect < 0){
+            yPos++;
+        } else if(xdestvect < 0 && ydestvect >0){
+            yPos++;
+        } else{
+            xPos--;
         }
+
     }
 
 
