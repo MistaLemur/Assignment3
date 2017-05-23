@@ -25,51 +25,62 @@ public class DigDug extends MovingGameObject {
     private int direction;
     private boolean attacking;
     public static Bitmap DigDugman[];
-    int action = event.getAction() & event.ACTION_MASK;
     int xPos = 0;
     int yPost =0;
 
     public void moveLeft( int ax1, int ay1, int ax2, int ay2) {
 
         //Positions of xaxis is subtracted
-        xPos--;
-        if (GameMap.collideDirtRect == true){
+
+        if (GameMap.collideDirtRect(ax1,ay1, ax2, ay2) == true){
             GameMap.digTunnelRect( ax1,  ay1,  ax2,  ay2);
+            xPos--;
+        }else {
+            xPos--;
         }
 
     }
 
     public void moveRight(int ax1, int ay1, int ax2, int ay2 ) {
-         xPos++;
-        if (GameMap.collideDirtRect == true){
+
+        if (GameMap.collideDirtRect(ax1,ay1, ax2, ay2) == true){
             GameMap.digTunnelRect( ax1,  ay1,  ax2,  ay2);
+            xPos++;
+        }else{
+            xPos++;
         }
 
     }
 
     public void moveDown(int ax1, int ay1, int ax2, int ay2) {
-        yPos--;
-        if (GameMap.collideDirtRect == true){
+
+        if (GameMap.collideDirtRect(ax1,ay1, ax2, ay2) == true){
             GameMap.digTunnelRect( ax1,  ay1,  ax2,  ay2);
+            yPos--;
+        }else {
+            yPos--;
         }
 
     }
 
     public void moveUp (int ax1, int ay1, int ax2, int ay2){
-        yPos++;
-        if (GameMap.collideDirtRect == true){
+
+        if (GameMap.collideDirtRect(ax1,ay1, ax2, ay2) == true){
             GameMap.digTunnelRect( ax1,  ay1,  ax2,  ay2);
+            yPos++;
+        }else{
+           yPos++;
         }
     }
 
     // ...
-
+    // if attacked
     public void attack() {
 
     }
 
     public void stopAttack() {
-
+        attacking = false;
     }
     public static void loadDigDugSprite(Context _context) {
 
