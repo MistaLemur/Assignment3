@@ -26,24 +26,40 @@ public class DigDug extends MovingGameObject {
     private boolean attacking;
     public static Bitmap DigDugman[];
     int action = event.getAction() & event.ACTION_MASK;
+    int xPos = 0;
+    int yPost =0;
 
-    public void moveLeft(int xPos) {
-       xPos--;
+    public void moveLeft( int ax1, int ay1, int ax2, int ay2) {
+
+        //Positions of xaxis is subtracted
+        xPos--;
+        if (GameMap.collideDirtRect == true){
+            GameMap.digTunnelRect( ax1,  ay1,  ax2,  ay2);
+        }
 
     }
 
-    public void moveRight(int xPos) {
+    public void moveRight(int ax1, int ay1, int ax2, int ay2 ) {
          xPos++;
+        if (GameMap.collideDirtRect == true){
+            GameMap.digTunnelRect( ax1,  ay1,  ax2,  ay2);
+        }
 
     }
 
-    public void moveDown(int yPos) {
+    public void moveDown(int ax1, int ay1, int ax2, int ay2) {
         yPos--;
+        if (GameMap.collideDirtRect == true){
+            GameMap.digTunnelRect( ax1,  ay1,  ax2,  ay2);
+        }
 
     }
 
-    public void moveUp (int yPos){
+    public void moveUp (int ax1, int ay1, int ax2, int ay2){
         yPos++;
+        if (GameMap.collideDirtRect == true){
+            GameMap.digTunnelRect( ax1,  ay1,  ax2,  ay2);
+        }
     }
 
     // ...
