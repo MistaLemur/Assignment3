@@ -3,6 +3,7 @@ package teambebop.teambebop_assignment3.Model;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.view.MotionEvent;
 
 import teambebop.teambebop_assignment3.R;
 
@@ -24,13 +25,17 @@ public class DigDug extends MovingGameObject {
     private int direction;
     private boolean attacking;
     public static Bitmap DigDugman[];
+    int action = event.getAction() & event.ACTION_MASK;
 
     public void moveLeft() {
+       if( event.getAction() == MotionEvent.ACTION_DOWN){
 
+       }
     }
 
     public void moveRight() {
         // xPos++;
+
     }
 
     // ...

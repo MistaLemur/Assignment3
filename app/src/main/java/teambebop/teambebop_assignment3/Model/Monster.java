@@ -33,7 +33,11 @@ public class Monster extends MovingGameObject {
     //collideDirtRect(int ax1, int ay1, int ax2, int ay2)
     //making mosnter move
     //public boolean collideDirtCircle(int ax1, int ay1, int r)
+    public void moveauto(int ax1, int ay1, int ){
+        if( GameMap.collideDirtCircle(ax1,ay1,r) == true ){
 
+        }
+    }
 
 
     //colliding with dirt. we stop wut
