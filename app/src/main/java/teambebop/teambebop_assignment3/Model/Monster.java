@@ -50,12 +50,18 @@ To determine what direction to move along
 
         if (xdestvect > 0 && ydestvect >0){
             xPos++;
-        }else if ( xdestvect > 0 && ydestvect < 0){
             yPos++;
-        } else if(xdestvect < 0 && ydestvect >0){
+        }else if ( xdestvect > 0 && ydestvect < 0){
+
+            xPos++;
             yPos--;
+
+        } else if(xdestvect < 0 && ydestvect >0){
+            xPos--;
+            yPos++;
         } else{
             xPos--;
+            yPos--;
         }
 
     }
