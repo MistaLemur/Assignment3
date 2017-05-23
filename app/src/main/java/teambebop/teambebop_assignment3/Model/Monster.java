@@ -49,19 +49,26 @@ To determine what direction to move along
         int ydestvect = ay1 - yPos;
 
         if (xdestvect > 0 && ydestvect >0){
-            xPos++;
-            yPos++;
+            if(GameMap.collideDirtRect(ax1,ay1, ax2, ay2) == false) {
+                xPos++;
+                yPos++;
+            }
         }else if ( xdestvect > 0 && ydestvect < 0){
-
-            xPos++;
-            yPos--;
+            if(GameMap.collideDirtRect(ax1,ay1, ax2, ay2) == false) {
+                xPos++;
+                yPos--;
+            }
 
         } else if(xdestvect < 0 && ydestvect >0){
-            xPos--;
-            yPos++;
+            if(GameMap.collideDirtRect(ax1,ay1, ax2, ay2) == false) {
+                xPos--;
+                yPos++;
+            }
         } else{
-            xPos--;
-            yPos--;
+            if(GameMap.collideDirtRect(ax1,ay1, ax2, ay2) == false) {
+                xPos--;
+                yPos--;
+            }
         }
 
     }
