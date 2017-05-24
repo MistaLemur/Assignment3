@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import teambebop.teambebop_assignment3.Controller.GameThread;
 import teambebop.teambebop_assignment3.R;
 
 /**
@@ -63,35 +64,6 @@ To determine what direction to move along
 
     // ax1 = digdug position
     //ay1 == digdug position
-
-    public void moveauto(int ax1, int ay1){
-        int xdestvect = ax1 - xPos;
-        int ydestvect = ay1 - yPos;
-
-        if (xdestvect > 0 && ydestvect >0){
-            if(GameMap.collideDirtRect(ax1,ay1, ax2, ay2) == false) {
-                xPos++;
-                yPos++;
-            }
-        }else if ( xdestvect > 0 && ydestvect < 0){
-            if(GameMap.collideDirtRect(ax1,ay1, ax2, ay2) == false) {
-                xPos++;
-                yPos--;
-            }
-
-        } else if(xdestvect < 0 && ydestvect >0){
-            if(GameMap.collideDirtRect(ax1,ay1, ax2, ay2) == false) {
-                xPos--;
-                yPos++;
-            }
-        } else{
-            if(GameMap.collideDirtRect(ax1,ay1, ax2, ay2) == false) {
-                xPos--;
-                yPos--;
-            }
-        }
-
-    }
 
 
     //colliding with dirt. we stop wut

@@ -16,9 +16,9 @@ public class GameThread extends Thread {
     public volatile boolean shouldStop = false;
     public volatile boolean isPaused = false;
 
-    public double gameTime;
-    public double lastTime;
-    public double deltaTime;
+    public static double gameTime;
+    public static double lastTime;
+    public static double deltaTime;
 
     public GameThread(GameController controller, GameView gameView) {
         this.controller = controller;
@@ -45,9 +45,9 @@ public class GameThread extends Thread {
             }
 
             try {
-                Thread.sleep(10);
+                Thread.sleep(16);
                 while(isPaused){
-                    Thread.sleep(10);
+                    Thread.sleep(16);
                 }
             }catch(InterruptedException e){
                 System.out.println(e);

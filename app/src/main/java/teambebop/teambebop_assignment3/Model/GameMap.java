@@ -115,7 +115,7 @@ class QuadTreeNode{
     public int isFilledIn = 1;
 
     //granularity is a constant variable that determines the minimum size of a leaf node.
-    static int granularity = 8;
+    static int granularity = 4;
 
     /*
     isFilledIn is a state variable for this quadtree node.
@@ -479,6 +479,7 @@ class QuadTreeNode{
         }else {
 
 
+            /*
             //debug draw here...
             Paint outlinePaint = new Paint();
             outlinePaint.setARGB(255, 255,255,255);
@@ -487,7 +488,7 @@ class QuadTreeNode{
                                 x2 + offx, y2 + offy, x1 + offx, y2 + offy,
                                 x1 + offx, y2 + offy, x1 + offx, y1 + offy};
             canvas.drawLines(vertices, outlinePaint);
-
+            */
 
             if(isFilledIn == 0){
                 //draw a rect for this node if it does not have dirt.
