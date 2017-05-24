@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.MotionEvent;
 
+import teambebop.teambebop_assignment3.Controller.GameThread;
 import teambebop.teambebop_assignment3.R;
 
 /**
@@ -21,12 +22,15 @@ Dig dug:
 7:
  */
 public class DigDug extends MovingGameObject {
-    private boolean alive;
+    private boolean alive = true;
     private int direction;
     private boolean attacking;
     public static Bitmap DigDugman[];
-    int xPos = 0;
-    int yPost =0;
+
+    int digCounter = 0;
+
+    double attackTimer = 0;
+    double attackDelay = 1;
 
 
     public DigDug(int newX, int newY, Context _context){
@@ -36,54 +40,52 @@ public class DigDug extends MovingGameObject {
         loadDigDugSprite(_context);
 
         icon = DigDugman[0];
+
+        this.speed = 150;
     }
-    /*
-    public void moveLeft( int ax1, int ay1, int ax2, int ay2) {
-
-        //Positions of xaxis is subtracted
-
-        if (GameMap.collideDirtRect(ax1,ay1, ax2, ay2) == true){
-            GameMap.digTunnelRect( ax1,  ay1,  ax2,  ay2);
-            xPos--;
-        }else {
-            xPos--;
-        }
-
-    }
-
-    public void moveRight(int ax1, int ay1, int ax2, int ay2 ) {
-
-        if (GameMap.collideDirtRect(ax1,ay1, ax2, ay2) == true){
-            GameMap.digTunnelRect( ax1,  ay1,  ax2,  ay2);
-            xPos++;
+    public void digDugDig(int dx, int dy, GameMap gameMap){
+        //This is the function that digdug calls when he's trying to dig.
+        //dx and dy is the direction vector of where he's trying to dig.
+        int digDepth = 16;
+        if(Math.abs(dx) > Math.abs(dy)){
+            dy = 0;
+            if(dx > 0){
+                dx = digDepth;
+            }else{
+                dx = -digDepth;
+            }
         }else{
-            xPos++;
+            dx = 0;
+            if(dy > 0){
+                dy = digDepth;
+            }else{
+                dy = -digDepth;
+            }
         }
 
+        int digPosX = xPos + dx;
+        int digPosY = yPos + dy;
+
+        digCounter++;
+        int digRadius = (int)((Math.sin(digCounter) * 0.2 + 1) * (collideSize));
+        gameMap.digTunnelCircle(digPosX, digPosY,digRadius);
     }
 
-    public void moveDown(int ax1, int ay1, int ax2, int ay2) {
+    public void kill(){
+        alive = false;
+    }
 
-        if (GameMap.collideDirtRect(ax1,ay1, ax2, ay2) == true){
-            GameMap.digTunnelRect( ax1,  ay1,  ax2,  ay2);
-            yPos--;
-        }else {
-            yPos--;
+    public void update(int destX, int destY, int inputMode, boolean shouldMove, GameMap gameMap){
+        if(shouldMove && inputMode == 0){
+            if(!moveTowards(destX, destY, gameMap, false)){
+                digDugDig(destX - xPos, destY - yPos, gameMap);
+            }
         }
 
-    }
+        if(shouldMove && inputMode == 1){
 
-    public void moveUp (int ax1, int ay1, int ax2, int ay2){
-
-        if (GameMap.collideDirtRect(ax1,ay1, ax2, ay2) == true){
-            GameMap.digTunnelRect( ax1,  ay1,  ax2,  ay2);
-            yPos++;
-        }else{
-           yPos++;
         }
     }
-
-    */
     // ...
     // if attacked
     public void attack() {
@@ -96,7 +98,7 @@ public class DigDug extends MovingGameObject {
     public static void loadDigDugSprite(Context _context) {
 
         DigDugman = new Bitmap[1];
-        DigDugman[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.pikachu);
+        DigDugman[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.pikachu2);
 
     }
 }

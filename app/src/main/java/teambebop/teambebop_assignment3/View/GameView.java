@@ -230,20 +230,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 return false;
             }
 
-            /*
-            if(gameMap != null){
-                System.out.println(" ");
-                System.out.println("DIGGING AT " + (x-offx) + ", " + (y-offy));
-                int testRadius = 32;
-                synchronized (controller.gameThread) {
-                    gameMap.digTunnelCircle(x - offx, y - offy, testRadius);
-                    //gameMap.digTunnelRect(x - offx - testRadius, y - offy - testRadius, x - offx + testRadius, y - offy + testRadius);
-                }
-            }
-            */
+            if(controller != null)
+                controller.processInput(x - offx, y - offy, inputMode);
+        }
+        if(event.getAction() == MotionEvent.ACTION_MOVE){
+            if(controller != null)
+                controller.processInput(x - offx, y - offy, inputMode);
+        }
+        if(event.getAction() == MotionEvent.ACTION_UP){
+            if(controller != null)
+                controller.processInput(x - offx, y - offy, -1);
         }
 
-        return false;
+        return true;
     }
 
     public void gameInitialization(){

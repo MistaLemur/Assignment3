@@ -25,6 +25,11 @@ public class GameController {
     public double score;
     public int lives;
 
+    private int inputX, inputY;
+    private int inputMode = 0;
+    private boolean hasInput;
+
+    public static Random RNG;
 
     public GameController(GameView newView) {
 
@@ -41,11 +46,16 @@ public class GameController {
          Inputmode refers to if the touch input is a move or a attack
          */
 
-        if(inputMode == 0){
-            //movement
-        }else if(inputMode == 1){
-            //attack
+        if(inputMode == -1){
+            hasInput = false;
+            return;
         }
+
+        inputX = touchX;
+        inputY = touchY;
+
+        hasInput = true;
+        this.inputMode = inputMode;
     }
 
     public void update() { // update anything that's moving
@@ -54,15 +64,21 @@ public class GameController {
         //rocks update
 
         //digdugupdate
-        /*
-        for (int i = 0; i < monsters.length; i++) {
-            //monsters[i].attack();
+        if(hasInput){
+            digDug.update(inputX, inputY, inputMode, hasInput, map);
         }
+
+        for (int i = 0; i < monsters.length; i++) {
+            if(monsters[i] == null) continue;
+            monsters[i].update(digDug.xPos, digDug.yPos, map);
+        }
+        /*
         for (int i = 0; i < rocks.length; i++) {
-            if (rocks[i].shouldFall())
-                rocks[i].fall();
+            if (rocks[i].shouldFall(map))
+                rocks[i].fall(map);
         }
         */
+
     }
 
     public void initializeController(){
@@ -110,18 +126,18 @@ public class GameController {
         digDug = new DigDug(cx, startTunnelLength, gameView.getContext());
 
         //now dig the random tunnels that enemies will inhabit
-        Random rand = new Random(System.currentTimeMillis());
+        RNG = new Random(System.currentTimeMillis());
 
         for(int i = 0; i < numTunnels; i++){
             int monstersInThisTunnel = minMonstersPerTunnel;
             if(maxMonstersPerTunnel > minMonstersPerTunnel)
-                monstersInThisTunnel += rand.nextInt(maxMonstersPerTunnel - minMonstersPerTunnel);
+                monstersInThisTunnel += RNG.nextInt(maxMonstersPerTunnel - minMonstersPerTunnel);
 
-            int tunnelLength = rand.nextInt(maxTunnelLength - minTunnelLength) + minTunnelLength;
+            int tunnelLength = RNG.nextInt(maxTunnelLength - minTunnelLength) + minTunnelLength;
 
             //first place the tunnel
             int w, h;
-            if(rand.nextBoolean()){
+            if(RNG.nextBoolean()){
                 //vertical
                 w = tunnelWidth;
                 h = tunnelLength;
@@ -133,8 +149,8 @@ public class GameController {
 
             int x, y;
 
-            x = rand.nextInt((int)(map.getWidth() - w)) + w/2;
-            y = rand.nextInt((int)(map.getHeight() - h)) + h/2;
+            x = RNG.nextInt((int)(map.getWidth() - w)) + w/2;
+            y = RNG.nextInt((int)(map.getHeight() - h)) + h/2;
 
 
             if(map.collideTunnelRect(x-w/2, y-h/2, x+w/2, y+h/2)){
@@ -160,15 +176,16 @@ public class GameController {
                 int mx = 0, my = 0;
                 if(h > w){
                     //vertical tunnel
-                    my = rand.nextInt(tunnelLength) - tunnelLength/2;
+                    my = RNG.nextInt(tunnelLength) - tunnelLength/2;
                 }else{
                     //horizontal tunnel
-                    mx = rand.nextInt(tunnelLength) - tunnelLength/2;
+                    mx = RNG.nextInt(tunnelLength) - tunnelLength/2;
                 }
 
                 //place monster somewhere random along length of the tunnel
 
-                int monsterType = rand.nextInt(3);
+                int monsterType = RNG.nextInt(3);
+
                 if(monsterType == 2){
                     Monster newMonster = new FireMonster(x + mx, y + my, gameView.getContext());
                     monsters[monsterCount++] = newMonster;
@@ -177,19 +194,21 @@ public class GameController {
                     monsters[monsterCount++] = newMonster;
                 }
 
+
             }
         }
 
         for(int i = 0; i < numRocks; i++){
             int rockWidth = 48;
-            int x = rand.nextInt((int)(map.getWidth() - rockWidth*2)) + rockWidth;
-            int y = rand.nextInt((int)(map.getHeight() - rockWidth * 2)) + rockWidth;
+            int x = RNG.nextInt((int)(map.getWidth() - rockWidth*2)) + rockWidth;
+            int y = RNG.nextInt((int)(map.getHeight() - rockWidth * 2)) + rockWidth;
 
             if(map.collideTunnelRect(x-rockWidth/2, y-rockWidth/2, x+rockWidth/2, y+rockWidth/2)){
                 i--;
                 continue;
             }
-            map.digTunnelRect(x-rockWidth/2, y-rockWidth/2, x+rockWidth/2, y+rockWidth/2);
+            //map.digTunnelRect(x-rockWidth/2, y-rockWidth/2, x+rockWidth/2, y+rockWidth/2);
+            map.digTunnelCircle(x, y, rockWidth/2);
 
             Rock newRock = new Rock(x, y, gameView.getContext());
             rocks[i] = newRock;

@@ -16,9 +16,9 @@ public class GameThread extends Thread {
     public volatile boolean shouldStop = false;
     public volatile boolean isPaused = false;
 
-    public static double gameTime;
-    public static double lastTime;
-    public static double deltaTime;
+    public static double gameTime=0;
+    public static double lastTime=0;
+    public static double deltaTime=0;
 
     public GameThread(GameController controller, GameView gameView) {
         this.controller = controller;
@@ -33,9 +33,6 @@ public class GameThread extends Thread {
         lastTime = System.currentTimeMillis()/1000;
 
         while (!shouldStop) {
-            deltaTime = System.currentTimeMillis()/1000 - lastTime;
-            lastTime = System.currentTimeMillis()/1000;
-            gameTime += deltaTime;
 
             Canvas canvas = sh.lockCanvas();
             if (canvas != null) {
@@ -44,10 +41,14 @@ public class GameThread extends Thread {
                 sh.unlockCanvasAndPost(canvas);
             }
 
+            deltaTime = System.currentTimeMillis()/1000.0 - lastTime;
+            lastTime = System.currentTimeMillis()/1000.0;
+            gameTime += deltaTime;
+
             try {
-                Thread.sleep(16);
+                Thread.sleep(10);
                 while(isPaused){
-                    Thread.sleep(16);
+                    Thread.sleep(10);
                 }
             }catch(InterruptedException e){
                 System.out.println(e);
