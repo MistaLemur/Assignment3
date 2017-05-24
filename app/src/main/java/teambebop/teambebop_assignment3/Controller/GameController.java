@@ -34,6 +34,8 @@ public class GameController {
 
     public static Random RNG;
 
+    private int tunnels = 4, enemies = 4, rockNum = 4;
+
     public GameController(GameView newView) {
 
         gameView = newView;
@@ -69,6 +71,13 @@ public class GameController {
         //digdugupdate
         if(hasInput){
             digDug.update(inputX, inputY, inputMode, hasInput, this, map);
+        }
+
+        if(monsters.size() == 0){
+            tunnels ++;
+            enemies ++;
+            generateLevel(tunnels, enemies, rockNum);
+            return;
         }
 
         for (int i = 0; i < monsters.size(); i++) {
