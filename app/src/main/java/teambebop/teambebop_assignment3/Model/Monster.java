@@ -26,9 +26,10 @@ Monster:
  */
 public class Monster extends MovingGameObject {
 
-    protected boolean alive;
+    protected boolean alive = true;
     public static Bitmap monsterSprites[];
     int type = 0;
+    public int deathCounter = 0;
 
     int chaseRadius = 48 * 10;
     int state = 0;
@@ -47,7 +48,7 @@ public class Monster extends MovingGameObject {
     double idleTimer = 0;
     double idleDelay = 2;
     double ghostTimer = 0;
-    double ghostDelay = 10;
+    double ghostDelay = 20;
     double phaseTimer = 0;
     double phaseDelay = 2;
 
@@ -86,6 +87,11 @@ public class Monster extends MovingGameObject {
     }
 
     public void update(int digDugX, int digDugY, GameMap map){
+        if(!alive){
+            death();
+            return;
+        }
+
         int dx = digDugX - xPos;
         int dy = digDugY - yPos;
         boolean inChaseRange = (dx*dx+dy*dy) < chaseRadius*chaseRadius;
@@ -234,6 +240,7 @@ public class Monster extends MovingGameObject {
         }
     }
 
+
     public void setSolid(boolean newSolid){
         isSolid = newSolid;
         if(isSolid){
@@ -250,12 +257,28 @@ public class Monster extends MovingGameObject {
     public void shocked(){
         shockCounter ++;
         shockTimer = GameThread.gameTime + shockDelay;
-        spriteSize += 5;
+        spriteWidth += 5;
+        spriteHeight += 5;
+
+        if(shockCounter >= maxShock){
+            death();
+        }
     }
     public void unshock(){
         shockCounter --;
         shockTimer = GameThread.gameTime + shockDelay;
-        spriteSize -= 5;
+        spriteWidth -= 5;
+        spriteHeight -= 5;
+    }
+    public void flatten(){
+        spriteHeight = 10;
+
+        death();
+    }
+
+    public void death(){
+        alive = false;
+        deathCounter ++;
     }
 
     //following digdug and touch digdug

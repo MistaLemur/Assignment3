@@ -30,7 +30,7 @@ public class DigDug extends MovingGameObject {
     int digCounter = 0;
 
     double attackTimer = 0;
-    double attackDelay = 1;
+    double attackDelay = 0.5;
 
 
     public DigDug(int newX, int newY, Context _context){

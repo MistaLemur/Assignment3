@@ -6,6 +6,7 @@ package teambebop.teambebop_assignment3.Controller;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import teambebop.teambebop_assignment3.*;
@@ -15,9 +16,9 @@ import teambebop.teambebop_assignment3.View.*;
 
 public class GameController {
     private GameView gameView;
-    private DigDug digDug;
-    private Monster[] monsters;
-    private Rock[] rocks;
+    public DigDug digDug;
+    public ArrayList<Monster> monsters;
+    public ArrayList<Rock> rocks;
     private GameMap map;
 
     public GameThread gameThread;
@@ -68,16 +69,29 @@ public class GameController {
             digDug.update(inputX, inputY, inputMode, hasInput, map);
         }
 
-        for (int i = 0; i < monsters.length; i++) {
-            if(monsters[i] == null) continue;
-            monsters[i].update(digDug.xPos, digDug.yPos, map);
+        for (int i = 0; i < monsters.size(); i++) {
+            Monster monster = monsters.get(i);
+            if(monster == null) continue;
+            if(monster.deathCounter > 30){
+                monsters.remove(monster);
+                i--;
+                continue;
+            }
+            monster.update(digDug.xPos, digDug.yPos, map);
         }
-        /*
-        for (int i = 0; i < rocks.length; i++) {
-            if (rocks[i].shouldFall(map))
-                rocks[i].fall(map);
+
+        for (int i = 0; i < rocks.size(); i++) {
+            Rock rock = rocks.get(i);
+            if(rock == null) continue;
+            if(rock.crumbleCounter > 20){
+                rocks.remove(rock);
+                i--;
+                continue;
+            }
+
+            rock.update(map, this);
         }
-        */
+
 
     }
 
@@ -108,8 +122,8 @@ public class GameController {
         int tunnelWidth = 48;
 
         int monsterCount = 0;
-        monsters = new Monster[maxMonstersPerTunnel * numTunnels];
-        rocks = new Rock[numRocks];
+        monsters = new ArrayList<Monster>();
+        rocks = new ArrayList<Rock>();
 
         /*
          first generate the tunnels
@@ -188,10 +202,10 @@ public class GameController {
 
                 if(monsterType == 2){
                     Monster newMonster = new FireMonster(x + mx, y + my, gameView.getContext());
-                    monsters[monsterCount++] = newMonster;
+                    monsters.add(newMonster);
                 }else{
                     Monster newMonster = new Monster(x + mx, y + my, gameView.getContext());
-                    monsters[monsterCount++] = newMonster;
+                    monsters.add(newMonster);
                 }
 
 
@@ -211,7 +225,7 @@ public class GameController {
             map.digTunnelCircle(x, y, rockWidth/2);
 
             Rock newRock = new Rock(x, y, gameView.getContext());
-            rocks[i] = newRock;
+            rocks.add(newRock);
 
         }
 

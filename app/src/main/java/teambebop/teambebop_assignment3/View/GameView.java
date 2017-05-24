@@ -13,6 +13,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 
+import java.util.ArrayList;
+
 import teambebop.teambebop_assignment3.Model.*;
 import teambebop.teambebop_assignment3.Controller.*;
 import teambebop.teambebop_assignment3.R;
@@ -51,8 +53,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Rect inputButtonRect;
 
     private DigDug digDug;
-    private Monster[] monsters;
-    private Rock[] rocks;
+    private ArrayList<Monster> monsters;
+    private ArrayList<Rock> rocks;
 
     private static Bitmap[] inputButtonBitmaps;
 
@@ -90,8 +92,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         //then iterate through each MovingGameObject, and draw them. Order doesn't matter
-        if(digDug != null) {
-            digDug.drawToCanvas(offx, offy, canvas);
+        if(rocks != null) {
+            for (Rock rock : rocks) {
+                if(rock == null) continue;
+                rock.drawToCanvas(offx, offy, canvas);
+            }
         }
 
         if(monsters != null) {
@@ -101,11 +106,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
 
-        if(rocks != null) {
-            for (Rock rock : rocks) {
-                if(rock == null) continue;
-                rock.drawToCanvas(offx, offy, canvas);
-            }
+        if(digDug != null) {
+            digDug.drawToCanvas(offx, offy, canvas);
         }
 
         //lastly, draw score, lives?, level?
@@ -298,7 +300,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
     */
 
-    public void setObjects(DigDug digdug, Monster[] monsters, Rock[] rocks){
+    public void setObjects(DigDug digdug, ArrayList<Monster> monsters, ArrayList<Rock> rocks){
         this.digDug = digdug;
         this.monsters = monsters;
         this.rocks = rocks;
