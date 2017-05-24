@@ -19,8 +19,15 @@ It does what monster does
 
 public class FireMonster extends Monster {
 
+    int type = 2;
 
+    public FireMonster(int newX, int newY, Context _context){
+        xPos = newX;
+        yPos = newY;
 
+        super.loadMonsterSprites(_context);
+        icon = super.monsterSprites[this.type];
+    }
 
     public void attack() {
 

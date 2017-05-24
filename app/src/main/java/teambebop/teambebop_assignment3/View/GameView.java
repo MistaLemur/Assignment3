@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -46,6 +47,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private Context myContext;
 
+    private int inputMode = 0;
+    private Rect inputButtonRect;
+
+    private DigDug digDug;
+    private Monster[] monsters;
+    private Rock[] rocks;
+
+    private static Bitmap[] inputButtonBitmaps;
+
     public GameView(Context context) {
 
         super(context);
@@ -80,9 +90,60 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         //then iterate through each MovingGameObject, and draw them. Order doesn't matter
+        if(digDug != null) {
+            digDug.drawToCanvas(offx, offy, canvas);
+        }
+
+        if(monsters != null) {
+            for (Monster monster : monsters) {
+                if(monster == null) continue;
+                monster.drawToCanvas(offx, offy, canvas);
+            }
+        }
+
+        if(rocks != null) {
+            for (Rock rock : rocks) {
+                if(rock == null) continue;
+                rock.drawToCanvas(offx, offy, canvas);
+            }
+        }
 
         //lastly, draw score, lives?, level?
 
+
+
+        //the input buttons
+        //first the move button (left/top)
+        if(inputButtonBitmaps != null && inputButtonBitmaps[0] != null && inputButtonBitmaps[1] != null) {
+            Rect buttRect = new Rect(inputButtonRect);
+            Paint buttPaint = new Paint();
+            if (screenHeight > screenWidth) {
+                buttRect.right = (buttRect.right + buttRect.left) / 2;
+            } else {
+                buttRect.bottom = (buttRect.bottom + buttRect.top) / 2;
+            }
+            if (inputMode == 0) {
+                buttPaint.setARGB(255, 255, 255, 255);
+            } else {
+                buttPaint.setARGB(64, 128, 128, 128);
+            }
+            canvas.drawBitmap(inputButtonBitmaps[0], null, buttRect, buttPaint);
+
+            //now the attack button (right/bottom)
+
+            buttRect = new Rect(inputButtonRect);
+            if (screenHeight > screenWidth) {
+                buttRect.left = (buttRect.right + buttRect.left) / 2;
+            } else {
+                buttRect.top = (buttRect.bottom + buttRect.top) / 2;
+            }
+            if (inputMode == 1) {
+                buttPaint.setARGB(255, 255, 255, 255);
+            } else {
+                buttPaint.setARGB(64, 128, 128, 128);
+            }
+            canvas.drawBitmap(inputButtonBitmaps[1], null, buttRect, buttPaint);
+        }
 
     }
 
@@ -121,7 +182,22 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             double ratio = mapWidth / gameMap.getWidth();
             gameMap.rescale(ratio);
 
+            if(digDug != null) digDug.rescale(ratio);
+            if(monsters != null){
+                for(Monster monster:monsters){
+                    if(monster == null) continue;
+                    monster.rescale(ratio);
+                }
+            }
+            if(rocks != null){
+                for(Rock rock:rocks){
+                    if(rock == null) continue;
+                    rock.rescale(ratio);
+                }
+            }
+
         }
+        computeButtonRect();
 
     }
 
@@ -146,6 +222,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         int y = (int) event.getY();
 
         if(event.getAction() == MotionEvent.ACTION_DOWN){
+
+            if(inputButtonRect.contains(x,y)){
+                System.out.println("INPUT TOGGLE");
+                inputMode = (inputMode+1)%2;
+
+                return false;
+            }
+
+            /*
             if(gameMap != null){
                 System.out.println(" ");
                 System.out.println("DIGGING AT " + (x-offx) + ", " + (y-offy));
@@ -155,6 +240,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     //gameMap.digTunnelRect(x - offx - testRadius, y - offy - testRadius, x - offx + testRadius, y - offy + testRadius);
                 }
             }
+            */
         }
 
         return false;
@@ -167,6 +253,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         System.out.println("NEW CONTROLLER");
         controller = new GameController(this);
 
+        inputButtonBitmaps = new Bitmap[2];
+        inputButtonBitmaps[0] = BitmapFactory.decodeResource(myContext.getApplicationContext().getResources(), R.drawable.move);
+        inputButtonBitmaps[1] = BitmapFactory.decodeResource(myContext.getApplicationContext().getResources(), R.drawable.attack);
+
         computeOffsets();
     }
 
@@ -178,6 +268,28 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         offx = (screenWidth-mapWidth) / 2;
         offy = (screenHeight-mapWidth) / 2;
     }
+
+    public void computeButtonRect(){
+
+        int cx, cy, w, h;
+        if(screenWidth < screenHeight){ //portrait mode
+            w = screenWidth * 1 / 2;
+            h = (screenHeight - offy - mapWidth) * 3 / 4;
+
+            cx = screenWidth / 2;
+            cy = offy + mapWidth + h/2;
+
+
+        }else{ //landscape mode
+            w = (screenWidth - offx - mapWidth) * 3 / 4;
+            h = (screenHeight) * 3 / 4;
+
+            cy = screenHeight / 2;
+            cx = offx + mapWidth + w / 2;
+
+        }
+        inputButtonRect = new Rect(cx-w/2, cy-h/2, cx+w/2, cy+h/2);
+    }
     //soil sprites
     /*
     public void soilsprites(Context _context){
@@ -186,5 +298,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         soil[2] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.soil3);
     }
     */
+
+    public void setObjects(DigDug digdug, Monster[] monsters, Rock[] rocks){
+        this.digDug = digdug;
+        this.monsters = monsters;
+        this.rocks = rocks;
+    }
 }
 

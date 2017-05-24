@@ -28,6 +28,16 @@ public class DigDug extends MovingGameObject {
     int xPos = 0;
     int yPost =0;
 
+
+    public DigDug(int newX, int newY, Context _context){
+        xPos = newX;
+        yPos = newY;
+
+        loadDigDugSprite(_context);
+
+        icon = DigDugman[0];
+    }
+    /*
     public void moveLeft( int ax1, int ay1, int ax2, int ay2) {
 
         //Positions of xaxis is subtracted
@@ -73,6 +83,7 @@ public class DigDug extends MovingGameObject {
         }
     }
 
+    */
     // ...
     // if attacked
     public void attack() {
@@ -85,7 +96,7 @@ public class DigDug extends MovingGameObject {
     public static void loadDigDugSprite(Context _context) {
 
         DigDugman = new Bitmap[1];
-        //DigDugman[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.pikachu);
+        DigDugman[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.pikachu);
 
     }
 }

@@ -18,19 +18,39 @@ Monster:
 public class Monster extends MovingGameObject {
 
     protected boolean alive;
-    public static Bitmap monster1[];
-    int xPos =0;
-    int yPos = 0;
+    public static Bitmap monsterSprites[];
+    int type = 0;
+
+    public Monster(){
+        if(monsterSprites != null){
+            type = (int)(System.currentTimeMillis()%2);
+            icon = monsterSprites[type];
+        }
+    }
+
+    public Monster(int newX, int newY, Context _context){
+        xPos = newX;
+        yPos = newY;
+
+        loadMonsterSprites(_context);
+
+        type = (int)(System.currentTimeMillis()%2);
+        icon = monsterSprites[type];
+    }
 
     public static void loadMonsterSprites(Context _context) {
-        if (monster1 == null) {
-            monster1 = new Bitmap[3];
-            //monster1[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.Joy);
-            //monster1[1] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.Celebi);
+        if (monsterSprites == null) {
+            monsterSprites = new Bitmap[3];
+            monsterSprites[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.ditto);
+            monsterSprites[1] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.celebi);
             // FIRE BREATHER
-            //monster1[2] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.Charizard);
-
+            monsterSprites[2] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.charizard);
         }
+    }
+
+    public void setType(int newType){
+        type = newType;
+        icon = monsterSprites[type];
     }
     //collideDirtRect(int ax1, int ay1, int ax2, int ay2)
     //making mosnter move

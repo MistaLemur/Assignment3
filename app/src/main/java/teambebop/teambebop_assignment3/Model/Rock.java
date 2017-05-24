@@ -14,7 +14,16 @@ public class Rock extends MovingGameObject {
     public boolean shouldFall() {
         return false;
     } //false == rock does not fall    ; true == the rock falls
-    public static Bitmap rocksprites[];
+    public static Bitmap rockSprites[];
+
+    public Rock(int newX, int newY, Context _context){
+
+        xPos = newX;
+        yPos = newY;
+
+        loadRockSprites(_context);
+        icon = rockSprites[0];
+    }
 
     public void fall() {
         // rock falls algorithm - Byron
@@ -30,10 +39,10 @@ public class Rock extends MovingGameObject {
         }
     }
 
-    public static void loadrockSprites(Context _context) {
+    public static void loadRockSprites(Context _context) {
 
-        rocksprites = new Bitmap[1];
-        //rocksprites[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.golemoddish);
+        rockSprites = new Bitmap[1];
+        rockSprites[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.golemoddish);
 
     }
 

@@ -28,7 +28,7 @@ public class GameMap {
 
     //the map has limited coordinates!
 
-    int x1, x2, y1, y2;
+    public int x1, x2, y1, y2;
 
     public GameMap(int nx1, int ny1, int nx2, int ny2){
         x1 = nx1;
@@ -39,6 +39,13 @@ public class GameMap {
         quadTreeRoot = new QuadTreeNode(x1, y1, x2, y2, null);
     }
 
+    public void newQuadTree(){
+        if(quadTreeRoot != null){
+            quadTreeRoot.flush();
+        }
+        quadTreeRoot = new QuadTreeNode(x1, y1, x2, y2, null);
+    }
+
     public boolean collideDirtRect(int ax1, int ay1, int ax2, int ay2){
         //This function will return true if the given rectangle collides with ANY dirt.
         return quadTreeRoot.collidesDirtRect(ax1, ay1, ax2, ay2);
@@ -46,7 +53,12 @@ public class GameMap {
 
     public boolean collideDirtCircle(int ax1, int ay1, int r){
         //This function will return true if the given circle collides with ANY dirt.
+
         return quadTreeRoot.collidesDirtCircle(ax1, ay1, r);
+    }
+
+    public boolean collideTunnelRect(int ax1, int ay1, int ax2, int ay2){
+        return quadTreeRoot.collideTunnelRect(ax1, ay1, ax2, ay2);
     }
 
     public void drawToCanvas(Canvas canvas, int offx, int offy){
@@ -131,6 +143,19 @@ class QuadTreeNode{
 
             isFilledIn = parent.isFilledIn;
         }
+    }
+
+    public void flush(){
+        //This function deletes this node and all of its children
+        if (children.size() > 0){
+            for(QuadTreeNode child:children){
+                child.flush();
+            }
+        }
+
+        parent = null;
+        children.clear();
+        children = null;
     }
 
     public void subdivide(){
@@ -317,6 +342,7 @@ class QuadTreeNode{
 
     public void digTunnelRect(int ax1, int ay1, int ax2, int ay2){
         //This function will dig a tunnel in the shape of the given rectangle
+        if(isFilledIn == 0) return;
 
         int collision = collidesRect(ax1, ay1, ax2, ay2);
         if(collision == 0) return; //the shape does not have anything to do with this node.
@@ -348,6 +374,7 @@ class QuadTreeNode{
 
     public void digTunnelCircle(int ax1, int ay1, int r) {
         //This function will dig a tunnel in the shape of the given rectangle
+        if(isFilledIn == 0) return;
 
         //run collision check
         int collision = collidesCircle(ax1, ay1, r);
@@ -416,6 +443,25 @@ class QuadTreeNode{
         return false;
     }
 
+    public boolean collideTunnelRect(int ax1, int ay1, int ax2, int ay2){
+        if(isFilledIn == 1) return false;
+        if(collidesRect(ax1, ay1, ax2, ay2) == 0){
+            return false;
+        }
+
+        if(children.size() > 0){
+            boolean returnValue = false;
+            for(QuadTreeNode child:children){
+                returnValue |= child.collideTunnelRect(ax1, ay1, ax2, ay2);
+            }
+            return returnValue;
+
+        }else if(isFilledIn == 0){
+            return true;
+        }
+        return false;
+    }
+
     public void drawToCanvas(Canvas canvas, int offx, int offy){
         //this will draw the quad tree to a canvas.
         //It draws tunnels as dark transparent pixels.
@@ -432,7 +478,7 @@ class QuadTreeNode{
             }
         }else {
 
-            /*
+
             //debug draw here...
             Paint outlinePaint = new Paint();
             outlinePaint.setARGB(255, 255,255,255);
@@ -441,7 +487,7 @@ class QuadTreeNode{
                                 x2 + offx, y2 + offy, x1 + offx, y2 + offy,
                                 x1 + offx, y2 + offy, x1 + offx, y1 + offy};
             canvas.drawLines(vertices, outlinePaint);
-            */
+
 
             if(isFilledIn == 0){
                 //draw a rect for this node if it does not have dirt.
