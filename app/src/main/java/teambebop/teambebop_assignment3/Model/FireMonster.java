@@ -43,7 +43,7 @@ public class FireMonster extends Monster {
         }
 
         if(state == 1 || state == 0){
-            if(fire == null && GameController.RNG.nextDouble() < fireBallRate){
+            if(fire == null && GameController.RNG.nextDouble() < fireBallRate && shockCounter == 0){
                 state = 3;
                 shotFire = false;
             }
@@ -55,7 +55,7 @@ public class FireMonster extends Monster {
                 if(shotFire) {
                     state = 0;
                 }
-                else{
+                else if(shockCounter == 0){
                     int dx = digDugX - xPos;
                     int dy = digDugY - yPos;
 
