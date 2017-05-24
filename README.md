@@ -19,9 +19,9 @@ How to play game:
 2. How to control Dig Dug
     a. Moving: Touch "move" button (Figure 2)
        i. top of screen = up, bottom of screen = down, right of screen = right, left of screen = left
-    b. Attack: Touch "attack" button
+    b. Attack: Touch "attack" button (Figure 3)
        i. then touch any part of the screen to attack
 
 How to finish the game:
-1. Kill all monsters. (Figure 3)
-2. Get killed by monsters
+1. Kill all monsters. 
+2. Get killed by monsters (Figure 4)
