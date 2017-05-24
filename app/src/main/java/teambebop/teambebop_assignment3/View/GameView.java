@@ -52,10 +52,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private int inputMode = 0;
     private Rect inputButtonRect;
 
-    private DigDug digDug;
-    private ArrayList<Monster> monsters;
-    private ArrayList<Rock> rocks;
-
     private static Bitmap[] inputButtonBitmaps;
 
     public GameView(Context context) {
@@ -92,23 +88,36 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         //then iterate through each MovingGameObject, and draw them. Order doesn't matter
-        if(rocks != null) {
-            for (Rock rock : rocks) {
+        if(controller.rocks != null) {
+            for (Rock rock : controller.rocks) {
                 if(rock == null) continue;
                 rock.drawToCanvas(offx, offy, canvas);
             }
         }
+        if(controller.thunderShocks != null){
+            for (Thundershock shock : controller.thunderShocks) {
+                if(shock == null) continue;
+                shock.drawToCanvas(offx, offy, canvas);
+            }
+        }
 
-        if(monsters != null) {
-            for (Monster monster : monsters) {
+        if(controller.monsters != null) {
+            for (Monster monster : controller.monsters) {
                 if(monster == null) continue;
                 monster.drawToCanvas(offx, offy, canvas);
             }
         }
-
-        if(digDug != null) {
-            digDug.drawToCanvas(offx, offy, canvas);
+        if(controller.fireballs != null){
+            for (Fireball fire : controller.fireballs) {
+                if(fire == null) continue;
+                fire.drawToCanvas(offx, offy, canvas);
+            }
         }
+
+        if(controller.digDug != null) {
+            controller.digDug.drawToCanvas(offx, offy, canvas);
+        }
+
 
         //lastly, draw score, lives?, level?
 
@@ -184,17 +193,23 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             double ratio = mapWidth / gameMap.getWidth();
             gameMap.rescale(ratio);
 
-            if(digDug != null) digDug.rescale(ratio);
-            if(monsters != null){
-                for(Monster monster:monsters){
+            if(controller.digDug != null) controller.digDug.rescale(ratio);
+            if(controller.monsters != null){
+                for(Monster monster:controller.monsters){
                     if(monster == null) continue;
                     monster.rescale(ratio);
                 }
             }
-            if(rocks != null){
-                for(Rock rock:rocks){
+            if(controller.rocks != null){
+                for(Rock rock:controller.rocks){
                     if(rock == null) continue;
                     rock.rescale(ratio);
+                }
+            }
+            if(controller.thunderShocks != null){
+                for(Thundershock shock:controller.thunderShocks){
+                    if(shock == null) continue;
+                    shock.rescale(ratio);
                 }
             }
 
@@ -274,36 +289,22 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         int cx, cy, w, h;
         if(screenWidth < screenHeight){ //portrait mode
-            w = screenWidth * 1 / 2;
-            h = (screenHeight - offy - mapWidth) * 3 / 4;
+            w = screenWidth * 1 / 3;
+            h = (screenHeight - offy - mapWidth) * 1 / 2;
 
             cx = screenWidth / 2;
-            cy = offy + mapWidth + h/2;
+            cy = offy + mapWidth + h + h / 4;
 
 
         }else{ //landscape mode
-            w = (screenWidth - offx - mapWidth) * 3 / 4;
-            h = (screenHeight) * 3 / 4;
+            w = (screenWidth - offx - mapWidth) * 1 / 2;
+            h = (screenHeight) * 1 / 2;
 
             cy = screenHeight / 2;
-            cx = offx + mapWidth + w / 2;
+            cx = offx + mapWidth + w;
 
         }
         inputButtonRect = new Rect(cx-w/2, cy-h/2, cx+w/2, cy+h/2);
-    }
-    //soil sprites
-    /*
-    public void soilsprites(Context _context){
-        soil[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.soil1);
-        soil[1] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.soil2);
-        soil[2] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.soil3);
-    }
-    */
-
-    public void setObjects(DigDug digdug, ArrayList<Monster> monsters, ArrayList<Rock> rocks){
-        this.digDug = digdug;
-        this.monsters = monsters;
-        this.rocks = rocks;
     }
 }
 

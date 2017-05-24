@@ -15,10 +15,12 @@ import teambebop.teambebop_assignment3.View.*;
 
 
 public class GameController {
-    private GameView gameView;
+    public GameView gameView;
     public DigDug digDug;
     public ArrayList<Monster> monsters;
     public ArrayList<Rock> rocks;
+    public ArrayList<Thundershock> thunderShocks = new ArrayList<Thundershock>();
+    public ArrayList<Fireball> fireballs = new ArrayList<Fireball>();
     private GameMap map;
 
     public GameThread gameThread;
@@ -66,7 +68,7 @@ public class GameController {
 
         //digdugupdate
         if(hasInput){
-            digDug.update(inputX, inputY, inputMode, hasInput, map);
+            digDug.update(inputX, inputY, inputMode, hasInput, this, map);
         }
 
         for (int i = 0; i < monsters.size(); i++) {
@@ -77,19 +79,48 @@ public class GameController {
                 i--;
                 continue;
             }
+
+            if(monster.collidesOtherObject(digDug)){
+                digDug.death();
+            }
             monster.update(digDug.xPos, digDug.yPos, map);
         }
 
         for (int i = 0; i < rocks.size(); i++) {
             Rock rock = rocks.get(i);
             if(rock == null) continue;
-            if(rock.crumbleCounter > 20){
+            if(rock.crumbleCounter > 30){
                 rocks.remove(rock);
                 i--;
                 continue;
             }
 
             rock.update(map, this);
+        }
+
+
+        for (int i = 0; i < thunderShocks.size(); i++) {
+            Thundershock shock = thunderShocks.get(i);
+            if(shock == null) continue;
+            if(!shock.alive){
+                thunderShocks.remove(shock);
+                i--;
+                continue;
+            }
+
+            shock.update(this, map);
+        }
+
+        for (int i = 0; i < fireballs.size(); i++) {
+            Fireball fire = fireballs.get(i);
+            if(fire == null) continue;
+            if(!fire.alive){
+                fireballs.remove(fire);
+                i--;
+                continue;
+            }
+
+            fire.update(this, map);
         }
 
 
@@ -163,8 +194,8 @@ public class GameController {
 
             int x, y;
 
-            x = RNG.nextInt((int)(map.getWidth() - w)) + w/2;
-            y = RNG.nextInt((int)(map.getHeight() - h)) + h/2;
+            x = RNG.nextInt((int)(map.getWidth() - w) - tunnelWidth) + w/2 + tunnelWidth/2;
+            y = RNG.nextInt((int)(map.getHeight() - h) - tunnelWidth) + h/2 + tunnelWidth/2;
 
 
             if(map.collideTunnelRect(x-w/2, y-h/2, x+w/2, y+h/2)){
@@ -199,6 +230,7 @@ public class GameController {
                 //place monster somewhere random along length of the tunnel
 
                 int monsterType = RNG.nextInt(3);
+                if(monsters.size() == 0) monsterType = 2;
 
                 if(monsterType == 2){
                     Monster newMonster = new FireMonster(x + mx, y + my, gameView.getContext());
@@ -222,14 +254,12 @@ public class GameController {
                 continue;
             }
             //map.digTunnelRect(x-rockWidth/2, y-rockWidth/2, x+rockWidth/2, y+rockWidth/2);
-            map.digTunnelCircle(x, y, rockWidth/2);
+            map.digTunnelCircle(x, y, rockWidth/2 + 4);
 
             Rock newRock = new Rock(x, y, gameView.getContext());
             rocks.add(newRock);
 
         }
-
-        setGameViewObjects(gameView);
     }
 
     public void setGameView(GameView view){
@@ -243,13 +273,6 @@ public class GameController {
         gameThread = new GameThread(this, gameView);
         gameThread.start();
 
-    }
-
-    public void setGameViewObjects(GameView view){
-        //this function sends the movableobjects to the gameview.
-        if(view == null) return;
-
-        view.setObjects(digDug, monsters, rocks);
     }
 
 }

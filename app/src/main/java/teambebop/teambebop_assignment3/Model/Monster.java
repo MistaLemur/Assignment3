@@ -41,7 +41,7 @@ public class Monster extends MovingGameObject {
     int shockCounter = 0;
     int maxShock = 4;
     double shockTimer = 0;
-    double shockDelay = 1.25;
+    double shockDelay = 2;
 
     int idleX = 0;
     int idleY = 0;
@@ -89,6 +89,7 @@ public class Monster extends MovingGameObject {
     public void update(int digDugX, int digDugY, GameMap map){
         if(!alive){
             death();
+            deathCounter ++;
             return;
         }
 
@@ -101,8 +102,10 @@ public class Monster extends MovingGameObject {
             ghostTimer = GameThread.gameTime + ghostDelay * 2 + GameController.RNG.nextDouble() * ghostDelay;
         }
 
-        if(shockCounter > 0 && GameThread.gameTime > shockTimer){
-            unshock();
+        if(shockCounter > 0){
+            if(GameThread.gameTime > shockTimer){
+                unshock();
+            }
             return;
         }
 
@@ -173,7 +176,7 @@ public class Monster extends MovingGameObject {
                 }
                 break;
 
-            default: //idle state
+            case 0: //idle state
                 //pick a direciton to move.
 
                 if (path != null && pathIndex < path.size()) {
@@ -271,14 +274,13 @@ public class Monster extends MovingGameObject {
         spriteHeight -= 5;
     }
     public void flatten(){
-        spriteHeight = 10;
+        spriteHeight = 20;
 
         death();
     }
 
     public void death(){
         alive = false;
-        deathCounter ++;
     }
 
     //following digdug and touch digdug

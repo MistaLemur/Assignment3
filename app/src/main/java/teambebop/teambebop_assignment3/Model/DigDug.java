@@ -5,8 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.MotionEvent;
 
+import teambebop.teambebop_assignment3.Controller.GameController;
 import teambebop.teambebop_assignment3.Controller.GameThread;
 import teambebop.teambebop_assignment3.R;
+
+import static teambebop.teambebop_assignment3.View.GameView.controller;
 
 /**
  * Created by Byron on 5/17/2017.
@@ -67,29 +70,47 @@ public class DigDug extends MovingGameObject {
         int digPosY = yPos + dy;
 
         digCounter++;
-        int digRadius = (int)((Math.sin(digCounter) * 0.2 + 1) * (collideSize));
+        int digRadius = (int)((Math.sin(digCounter) * 0.2 + 1) * (collideSize+1));
         gameMap.digTunnelCircle(digPosX, digPosY,digRadius);
     }
 
-    public void kill(){
-        alive = false;
-    }
+    public void update(int destX, int destY, int inputMode, boolean shouldMove, GameController controller, GameMap gameMap){
+        if(!alive) return;
 
-    public void update(int destX, int destY, int inputMode, boolean shouldMove, GameMap gameMap){
+        int dx = destX - xPos;
+        int dy = destY - yPos;
         if(shouldMove && inputMode == 0){
             if(!moveTowards(destX, destY, gameMap, false)){
-                digDugDig(destX - xPos, destY - yPos, gameMap);
+                digDugDig(dx, dy, gameMap);
             }
         }
 
         if(shouldMove && inputMode == 1){
+            //attack towards this position
+            if(GameThread.gameTime > attackTimer) {
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    dy = 0;
+                } else {
+                    dx = 0;
+                }
 
+                if (dx != 0 || dy != 0) {
+                    controller.thunderShocks.add(new Thundershock(xPos, yPos, dx, dy, controller.gameView.getContext()));
+                    attackTimer = GameThread.gameTime + attackDelay;
+                }
+            }
         }
     }
-    // ...
-    // if attacked
-    public void attack() {
 
+    public void flatten(){
+        spriteHeight = 20;
+
+        death();
+    }
+
+    public void death(){
+        alive = false;
+        icon = DigDugman[1];
     }
 
     public void stopAttack() {
@@ -97,8 +118,10 @@ public class DigDug extends MovingGameObject {
     }
     public static void loadDigDugSprite(Context _context) {
 
-        DigDugman = new Bitmap[1];
+        DigDugman = new Bitmap[2];
         DigDugman[0] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.pikachu2);
+        DigDugman[1] = BitmapFactory.decodeResource(_context.getApplicationContext().getResources(), R.drawable.dedpika);
+
 
     }
 }

@@ -48,10 +48,16 @@ public class Rock extends MovingGameObject {
 
             moveTowards(xPos, yPos+20, map, false);
 
+            if(controller.digDug != null){
+                if(this.collidesOtherObject(controller.digDug)){
+                    controller.digDug.flatten();
+                    controller.digDug.yPos = this.yPos + this.spriteHeight/2;
+                }
+            }
             for(Monster monster:controller.monsters){
                 if(this.collidesOtherObject(monster)){
                     monster.flatten();
-                    monster.yPos = this.yPos + this.collideSize/2;
+                    monster.yPos = this.yPos + this.spriteHeight/2;
                 }
             }
 
