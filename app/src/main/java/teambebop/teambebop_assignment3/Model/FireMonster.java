@@ -23,7 +23,7 @@ public class FireMonster extends Monster {
 
     boolean shotFire = false;
     Fireball fire;
-    double fireBallRate = 0.05;
+    double fireBallRate = 0.02;
 
     public FireMonster(int newX, int newY, Context _context){
         super.type = 2;
