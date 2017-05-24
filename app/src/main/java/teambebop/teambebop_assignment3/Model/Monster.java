@@ -86,7 +86,7 @@ public class Monster extends MovingGameObject {
         }
     }
 
-    public void update(int digDugX, int digDugY, GameMap map){
+    public void update(int digDugX, int digDugY, GameMap map, GameController controller){
         if(!alive){
             death();
             deathCounter ++;
@@ -390,8 +390,6 @@ public class Monster extends MovingGameObject {
         for(int i = reversePath.size()-1; i >= 0; i--){
             newPath.add(reversePath.get(i));
         }
-
-        System.out.println("A* FOUND PATH " + newPath.size());
 
         return newPath;
     }

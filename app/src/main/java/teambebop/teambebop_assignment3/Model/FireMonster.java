@@ -23,7 +23,7 @@ public class FireMonster extends Monster {
 
     boolean shotFire = false;
     Fireball fire;
-    double fireBallRate = 0.1;
+    double fireBallRate = 0.05;
 
     public FireMonster(int newX, int newY, Context _context){
         super.type = 2;
@@ -34,6 +34,7 @@ public class FireMonster extends Monster {
         icon = super.monsterSprites[type];
     }
 
+    @Override
     public void update(int digDugX, int digDugY, GameMap map, GameController controller){
         if(!alive){
             death();
@@ -42,7 +43,7 @@ public class FireMonster extends Monster {
         }
 
         if(state == 1 || state == 0){
-            if(fire == null && GameController.RNG.nextDouble() > fireBallRate){
+            if(fire == null && GameController.RNG.nextDouble() < fireBallRate){
                 state = 3;
                 shotFire = false;
             }
@@ -51,7 +52,9 @@ public class FireMonster extends Monster {
             //shoot the fireball!
 
             if(fire == null){
-                if(shotFire) state = 0;
+                if(shotFire) {
+                    state = 0;
+                }
                 else{
                     int dx = digDugX - xPos;
                     int dy = digDugY - yPos;
@@ -62,8 +65,10 @@ public class FireMonster extends Monster {
                         dx = 0;
                     }
 
+                    System.out.println("SHOOT FIREBALL: " + dx + ", " + dy);
                     fire = new Fireball(xPos, yPos, dx, dy, controller.gameView.getContext());
                     controller.fireballs.add(fire);
+                    fire.owner = this;
                     shotFire = true;
                 }
             }else {
@@ -71,6 +76,6 @@ public class FireMonster extends Monster {
             }
         }
 
-        super.update(digDugX, digDugY, map);
+        super.update(digDugX, digDugY, map, controller);
     }
 }

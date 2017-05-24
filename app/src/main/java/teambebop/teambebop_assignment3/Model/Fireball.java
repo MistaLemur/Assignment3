@@ -20,6 +20,8 @@ public class Fireball extends MovingGameObject {
     public boolean alive = true;
     int chargeCounter = 0;
 
+    public FireMonster owner;
+
     public Fireball(int x, int y, int vx, int vy, Context _context) {
         speed *= 2;
         xPos = x;
@@ -54,7 +56,10 @@ public class Fireball extends MovingGameObject {
     }
 
     public void death(){
+
         alive = false;
+        owner.fire = null;
+        owner = null;
     }
 
 

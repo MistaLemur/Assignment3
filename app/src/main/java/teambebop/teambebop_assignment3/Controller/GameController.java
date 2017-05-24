@@ -83,7 +83,7 @@ public class GameController {
             if(monster.collidesOtherObject(digDug)){
                 digDug.death();
             }
-            monster.update(digDug.xPos, digDug.yPos, map);
+            monster.update(digDug.xPos, digDug.yPos, map, this);
         }
 
         for (int i = 0; i < rocks.size(); i++) {
