@@ -1,3 +1,7 @@
+/*
+Author: Anthony SuVasquez
+*/
+
 package teambebop.teambebop_assignment3.Model;
 
 import android.content.Context;
@@ -15,15 +19,6 @@ import teambebop.teambebop_assignment3.R;
 
 import static teambebop.teambebop_assignment3.Controller.GameController.RNG;
 
-/**
- * Created by Byron on 5/17/2017.
- */
-/*
-Monster:
-1: Follows dig dug (speed normal dig dug speed) (I am probably going to make them start by moving around)
-2:
-3:
- */
 public class Monster extends MovingGameObject {
 
     protected boolean alive = true;
@@ -38,6 +33,7 @@ public class Monster extends MovingGameObject {
     //1: chase
     //2: ghost
 
+    //shock counter is for the damage that the player pikachu character does to the monsters.
     int shockCounter = 0;
     int maxShock = 4;
     double shockTimer = 0;
@@ -109,11 +105,10 @@ public class Monster extends MovingGameObject {
             return;
         }
 
-        switch(state){ //This is a crute state-machine
+        switch(state){ //This is a state-machine
             case 1: //chase state
                 /*
-                 Pathfinding is pretty convoluted here.
-                 I aint got no time to djikstra's or A* for the quadtree :<
+                 Pathfinding to the player character uses A*
                  */
                 boolean shouldSearchNewPath = false;
                 if (path != null && pathIndex < path.size()) {
@@ -162,6 +157,7 @@ public class Monster extends MovingGameObject {
                 break;
 
             case 2: //ghost state
+                //In dig dug, monsters can enter a ghost state where they will phase through the dirt and chase the player.
                 setSolid(false);
                 System.out.println("GHOST STATE");
                 if(!map.collideDirtRect(rect.left, rect.top, rect.right, rect.bottom) && GameThread.gameTime > phaseTimer){
@@ -177,7 +173,9 @@ public class Monster extends MovingGameObject {
                 break;
 
             case 0: //idle state
-                //pick a direciton to move.
+                //The monster is just sitting around and waiting for the player in this state. 
+                //Random movement here makes them slightly more interesting
+                //pick a direction to move.
 
                 if (path != null && pathIndex < path.size()) {
                     //move along the path.
@@ -245,6 +243,7 @@ public class Monster extends MovingGameObject {
 
 
     public void setSolid(boolean newSolid){
+        //This function changes the isSolid boolean, which determines if the monster can phase through dirt or not.
         isSolid = newSolid;
         if(isSolid){
             icon = monsterSprites[type];
@@ -258,6 +257,7 @@ public class Monster extends MovingGameObject {
     }
 
     public void shocked(){
+        //This function is called to deal damage to the monster
         shockCounter ++;
         shockTimer = GameThread.gameTime + shockDelay;
         spriteWidth += 5;
@@ -268,12 +268,14 @@ public class Monster extends MovingGameObject {
         }
     }
     public void unshock(){
+        //Damaged monsters heal over time. This function is called to heal damage.
         shockCounter --;
         shockTimer = GameThread.gameTime + shockDelay;
         spriteWidth -= 5;
         spriteHeight -= 5;
     }
     public void flatten(){
+        //This function is called when a monster is crushed by a stone.
         spriteHeight = 20;
 
         death();
@@ -285,12 +287,7 @@ public class Monster extends MovingGameObject {
 
     //following digdug and touch digdug
     public void attack( int ax1, int ay1, int r) {
-        /*
-
-        if( GameMap.collideDirtCircle(ax1,ay1,r) == true ){
-
-        }
-        */
+        //Since each monster has different attack behaviors, this is just an empty function meant to be overriden
     }
 
 
@@ -299,6 +296,7 @@ public class Monster extends MovingGameObject {
 
         //debug draw
         /*
+        //This draws the A* path that the monster is taking.
         if(path != null && path.size() > 0){
             for(node n:path){
                 n.drawToCanvas(xOff, yOff, canvas);
@@ -307,7 +305,7 @@ public class Monster extends MovingGameObject {
         */
     }
 
-    //A*. This is kind of a hacky implementation, but I started writing this at 9pm May 23rd so I don't have the time to make shit nice.
+    //A* implementation. This uses rectangular nodes that are arbitrarily sized in order to find paths through the tunnel network.
     public ArrayList<node> pathfind(int destX, int destY , GameMap map){
         ArrayList<node> newPath  = new ArrayList<node>();
         ArrayList<node> reversePath = new ArrayList<node>();
@@ -396,6 +394,8 @@ public class Monster extends MovingGameObject {
 }
 
 class node{
+    //This node is for A* pathfinding.
+    
     int x;
     int y;
     int nodeWidth = 20;
@@ -454,6 +454,7 @@ class node{
     }
 
     public void drawToCanvas(int xOff, int yOff, Canvas canvas){
+        //This function is for debugging. Drawing node paths to the screen to troubleshoot the monsters' pathfinding.
         Rect A = new Rect(x - nodeWidth/2 + xOff, y - nodeWidth/2 + yOff, x + nodeWidth/2 + xOff, y + nodeWidth/2 + yOff);
         int x1 = A.left;
         int y1 = A.top;
