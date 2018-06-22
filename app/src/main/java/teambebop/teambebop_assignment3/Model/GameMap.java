@@ -1,3 +1,6 @@
+/*
+Author: Anthony SuVasquez
+*/
 package teambebop.teambebop_assignment3.Model;
 
 import android.graphics.Canvas;
@@ -7,13 +10,10 @@ import android.graphics.Rect;
 
 import java.util.ArrayList;
 
-/**
- * Created by Miguel SuVasquez on 5/17/2017.
- */
-
 /*
 The GameMap class, in order to achieve a high granularity when digging tunnels,
 implements a quadtree to keep track of the dirt and the tunnels.
+
 While this can technically keep track of dirt and tunnels, per pixel... setting it to a very high granularity
 actually causes the game to slow down significantly because of the number of nodes that much be checked for the most basic functions.
 The GameMap only keeps track of dirt, and has nothing to do with the characters that might inhabit the space.
