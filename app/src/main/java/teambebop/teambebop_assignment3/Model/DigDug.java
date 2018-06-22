@@ -1,3 +1,6 @@
+/*
+Author: Anthony SuVasquez
+*/
 package teambebop.teambebop_assignment3.Model;
 
 import android.content.Context;
@@ -11,9 +14,6 @@ import teambebop.teambebop_assignment3.R;
 
 import static teambebop.teambebop_assignment3.View.GameView.controller;
 
-/**
- * Created by Byron on 5/17/2017.
- */
 /*
 Dig dug:
 1: can move up down right and left
