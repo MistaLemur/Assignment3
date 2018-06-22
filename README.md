@@ -1,7 +1,7 @@
 # TeamBebop_Assignment3
 
 
-Miguel SuVasquez #39573991
+Anthony "Miguel" SuVasquez #39573991
 Byron Aguilar    #50055962
 
 How to run this app:
