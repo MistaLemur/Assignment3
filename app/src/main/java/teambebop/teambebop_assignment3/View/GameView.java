@@ -1,5 +1,5 @@
 /*
-Author: Anthony "Miguel" SuVasquez
+Author: Anthony SuVasquez
 
 This file contains all application drawing functions and all touch input capturing.
 */
