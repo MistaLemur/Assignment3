@@ -1,3 +1,7 @@
+/*
+Author: Anthony SuVasquez
+*/
+
 package teambebop.teambebop_assignment3.Model;
 
 import android.graphics.Bitmap;
@@ -8,14 +12,10 @@ import teambebop.teambebop_assignment3.Controller.GameController;
 import teambebop.teambebop_assignment3.Controller.GameThread;
 import teambebop.teambebop_assignment3.R;
 
-/**
- * Created by Byron on 5/17/2017.
- */
-
 /*
 Firemonster.
 It does what monster does
-1: it moves in real time. Thread **********
+1: it moves in real time. 
 2: breathes fire
  */
 
