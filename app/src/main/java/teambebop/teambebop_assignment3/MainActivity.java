@@ -1,3 +1,7 @@
+/*
+Author: Anthony SuVasquez
+*/
+
 package teambebop.teambebop_assignment3;
 
 import android.support.v7.app.AppCompatActivity;
