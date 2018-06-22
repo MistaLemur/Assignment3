@@ -1,3 +1,6 @@
+/*
+Author: Anthony SuVasquez
+*/
 package teambebop.teambebop_assignment3.Model;
 
 import android.content.Context;
