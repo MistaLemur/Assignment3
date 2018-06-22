@@ -1,5 +1,9 @@
-package teambebop.teambebop_assignment3.View;
+/*
+Author: Anthony "Miguel" SuVasquez
 
+This file contains all application drawing functions and all touch input capturing.
+*/
+package teambebop.teambebop_assignment3.View;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,11 +22,6 @@ import java.util.ArrayList;
 import teambebop.teambebop_assignment3.Model.*;
 import teambebop.teambebop_assignment3.Controller.*;
 import teambebop.teambebop_assignment3.R;
-
-/**
- * Created by Byron on 5/17/2017.
- */
-
 
 /*
  * For reference, pixel scaling is ~2x.
