@@ -1,8 +1,8 @@
-package teambebop.teambebop_assignment3.Model;
+/*
+Author: Anthony SuVasquez
+*/
 
-/**
- * Created by Byron on 5/17/2017.
- */
+package teambebop.teambebop_assignment3.Model;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -11,12 +11,12 @@ import android.graphics.Rect;
 import teambebop.teambebop_assignment3.Controller.GameThread;
 
 public abstract class MovingGameObject {
+    //This class is the parent-class to any moving game object that takes up a space on the game level.
+    //These have a collision box, a sprite, and some functions for moving around.
+    
     public int xPos, yPos;
     public int minX = 0, minY = -40, maxX = 0, maxY = 40;
     protected Bitmap icon;
-
-    //These are doubles because, in hindsight, it was a mistake to make the quadtree dimensions be pixel-based.
-    //Instead the quadtree should have been decimals from 0 to 1... :(
 
     protected int spriteWidth = 48;
     protected int spriteHeight = 48;
@@ -32,15 +32,8 @@ public abstract class MovingGameObject {
 
     public void drawToCanvas(int xOff, int yOff, Canvas canvas){
         if(icon == null) return;
-
+        
         Rect spriteRect = new Rect(xPos-spriteWidth/2 + xOff, yPos-spriteHeight/2 + yOff, xPos+spriteWidth/2 + xOff, yPos+spriteHeight/2 + yOff);
-        /*
-        if(!faceEast){
-            int tmp = spriteRect.left;
-            spriteRect.left = spriteRect.right;
-            spriteRect.right = tmp;
-        }
-        */
 
         canvas.drawBitmap(icon, null, spriteRect, null);
     }
