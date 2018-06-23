@@ -13,6 +13,9 @@ import teambebop.teambebop_assignment3.Model.GameMap;
 import teambebop.teambebop_assignment3.Model.MovingGameObject;
 import teambebop.teambebop_assignment3.R;
 
+/*
+Some monsters will spit fireballs at the player character.
+*/
 public class Fireball extends MovingGameObject {
 
     public static Bitmap[] fireSprites;
