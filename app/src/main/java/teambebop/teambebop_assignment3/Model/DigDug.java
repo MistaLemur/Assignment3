@@ -70,7 +70,8 @@ public class DigDug extends MovingGameObject {
         int digPosY = yPos + dy;
 
         digCounter++;
-        int digRadius = (int)((Math.sin(digCounter) * 0.2 + 1) * (collideSize+1));
+        //The dig radius oscillates to give tunnels an interesting shape.
+        int digRadius = (int)((Math.sin(digCounter) * 0.2 + 1) * (collideSize+1)); 
         gameMap.digTunnelCircle(digPosX, digPosY,digRadius);
     }
 
