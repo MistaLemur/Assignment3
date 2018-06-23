@@ -9,7 +9,10 @@ import android.view.SurfaceHolder;
 
 import teambebop.teambebop_assignment3.View.GameView;
 
-
+/*
+This thread runs and continuously calls the update loops.
+This also triggers frame drawing every tick.
+*/
 public class GameThread extends Thread {
     private GameController controller;
     private GameView gameView;
