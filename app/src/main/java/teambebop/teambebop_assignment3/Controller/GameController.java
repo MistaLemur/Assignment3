@@ -1,8 +1,8 @@
-package teambebop.teambebop_assignment3.Controller;
+/*
+Author: Byron and Anthony
+*/
 
-/**
- * Created by Byron on 5/17/2017.
- */
+package teambebop.teambebop_assignment3.Controller;
 
 import android.content.Context;
 
@@ -13,6 +13,13 @@ import teambebop.teambebop_assignment3.*;
 import teambebop.teambebop_assignment3.Model.*;
 import teambebop.teambebop_assignment3.View.*;
 
+/*
+The GameController class kind of ties everything together.
+It keeps track of the current map, active entities like monsters and player character, and runs updates on everything when
+invoked by the GameThread class.
+
+This class also receives inputs from the GameView, and processes updates from player controls.
+*/
 
 public class GameController {
     public GameView gameView;
@@ -63,16 +70,16 @@ public class GameController {
         this.inputMode = inputMode;
     }
 
-    public void update() { // update anything that's moving
-        //monsters update
-
-        //rocks update
+    public void update() { 
+        //This function is called by the GameThread every tick.
+        //This function then goes and calls the update() functions for all of the other active entities in the game.
 
         //digdugupdate
         if(hasInput){
             digDug.update(inputX, inputY, inputMode, hasInput, this, map);
         }
 
+        //If all the monsters have been killed, generate a new level.
         if(monsters.size() == 0){
             tunnels ++;
             enemies ++;
@@ -80,6 +87,7 @@ public class GameController {
             return;
         }
 
+        //monsters update
         for (int i = 0; i < monsters.size(); i++) {
             Monster monster = monsters.get(i);
             if(monster == null) continue;
@@ -95,6 +103,7 @@ public class GameController {
             monster.update(digDug.xPos, digDug.yPos, map, this);
         }
 
+        //rocks update
         for (int i = 0; i < rocks.size(); i++) {
             Rock rock = rocks.get(i);
             if(rock == null) continue;
@@ -107,7 +116,7 @@ public class GameController {
             rock.update(map, this);
         }
 
-
+        //thundershocks update
         for (int i = 0; i < thunderShocks.size(); i++) {
             Thundershock shock = thunderShocks.get(i);
             if(shock == null) continue;
@@ -120,6 +129,7 @@ public class GameController {
             shock.update(this, map);
         }
 
+        //fireballs update
         for (int i = 0; i < fireballs.size(); i++) {
             Fireball fire = fireballs.get(i);
             if(fire == null) continue;
@@ -146,11 +156,12 @@ public class GameController {
     }
 
     public void newGame(){
-
         generateLevel(4, 4, 4);
     }
 
     public void generateLevel(int numTunnels, int numMonsters, int numRocks){
+        //this generates new levels, and places monsters and rocks in the level.
+        //The player character almost always resides in the center at the start.
 
         map.newQuadTree();
 
@@ -254,6 +265,8 @@ public class GameController {
         }
 
         for(int i = 0; i < numRocks; i++){
+            //generate rocks
+            
             int rockWidth = 48;
             int x = RNG.nextInt((int)(map.getWidth() - rockWidth*2)) + rockWidth;
             int y = RNG.nextInt((int)(map.getHeight() - rockWidth * 2)) + rockWidth;
@@ -262,7 +275,6 @@ public class GameController {
                 i--;
                 continue;
             }
-            //map.digTunnelRect(x-rockWidth/2, y-rockWidth/2, x+rockWidth/2, y+rockWidth/2);
             map.digTunnelCircle(x, y, rockWidth/2 + 4);
 
             Rock newRock = new Rock(x, y, gameView.getContext());
