@@ -1,3 +1,8 @@
+/*
+Author: Byron and Anthony
+
+*/
+
 package teambebop.teambebop_assignment3.Model;
 
 import android.content.Context;
@@ -7,11 +12,10 @@ import android.graphics.BitmapFactory;
 import teambebop.teambebop_assignment3.Controller.GameController;
 import teambebop.teambebop_assignment3.R;
 
-/**
- * Created by Byron on 5/17/2017.
- */
-
 public class Rock extends MovingGameObject {
+    //This class represents the rocks that are strewn across the level.
+    //These rocks can fall and crush monsters and player characters.
+    
     public static Bitmap rockSprites[];
 
     private int rumble = 13;
