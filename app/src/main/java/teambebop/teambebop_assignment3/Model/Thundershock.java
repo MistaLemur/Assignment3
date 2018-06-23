@@ -1,3 +1,6 @@
+/*
+Author: Anthony SuVasquez
+*/
 package teambebop.teambebop_assignment3.Model;
 
 import android.content.Context;
@@ -8,12 +11,10 @@ import teambebop.teambebop_assignment3.Controller.GameController;
 import teambebop.teambebop_assignment3.Controller.GameThread;
 import teambebop.teambebop_assignment3.R;
 
-/**
- * Created by Admin on 5/23/2017.
- */
-
 /*
  this class is essentially equivalent to the inflating attack from the original game
+ 
+ Pikashu can shoot thundershocks to attack monsters. As monsters get dealt damage, they inflate and eventually explode.
  */
 
 public class Thundershock extends MovingGameObject {
